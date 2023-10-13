@@ -131,17 +131,10 @@ namespace CustomMacroPlugin0.Tools.FlowManager
 
                     ((Func<Task>)(async () =>
                     {
-                        using (macro_cts = new())
+                        await foreach (var item in ComboFlow())
                         {
-                            macro_cts_is_disposed = false;
-                            {
-                                await foreach (var item in ComboFlow())
-                                {
-                                    //Print($"action_idx: {item}");
-                                };
-                            }
-                            macro_cts_is_disposed = true;
-                        }
+                            //Print($"action_idx: {item}");
+                        };
                     }))().ConfigureAwait(false);
                 }
             }
@@ -155,52 +148,58 @@ namespace CustomMacroPlugin0.Tools.FlowManager
 
         private async IAsyncEnumerable<int?> ComboFlow()
         {
-            macro_cts = new();
-            var current_token = macro_cts.Token;
-            var canceled = false;
-            var count = 0;
-
-            Print($"{macro_name} Start");
+            using (macro_cts = new())
             {
-                macro_task_is_running = true;//二次上锁
+                macro_cts_is_disposed = false;
                 {
-                    do
-                    {
-                        count = 0;
-                        temp = new() { LX = 128, LY = 128, RX = 128, RY = 128 };
-                        foreach (var item in macro_actioninfo_list)
-                        {
-                            if (macro_task_cancelflag) { break; }
+                    var current_token = macro_cts.Token;
+                    var canceled = false;
+                    var count = 0;
 
-                            var duration = item.GetDuration;
+                    Print($"{macro_name} Start");
+                    {
+                        macro_task_is_running = true;//二次上锁
+                        {
+                            do
                             {
-                                if (duration < 100)
+                                count = 0;
+                                temp = new() { LX = 128, LY = 128, RX = 128, RY = 128 };
+                                foreach (var item in macro_actioninfo_list)
                                 {
-                                    if (item.NoAction is false) { UpdateNow(item.Key, item.Value); }
-                                    await Task.Delay(item.GetDuration).ConfigureAwait(false); yield return count++;
-                                }
-                                else
-                                {
-                                    try
+                                    if (macro_task_cancelflag) { break; }
+
+                                    var duration = item.GetDuration;
                                     {
-                                        if (item.NoAction is false) { UpdateNow(item.Key, item.Value); }
-                                        await Task.Delay(item.GetDuration, current_token).ConfigureAwait(false);
-                                    }
-                                    catch
-                                    {
-                                        canceled = true; break;
+                                        if (duration < 100)
+                                        {
+                                            if (item.NoAction is false) { UpdateNow(item.Key, item.Value); }
+                                            await Task.Delay(item.GetDuration).ConfigureAwait(false); yield return count++;
+                                        }
+                                        else
+                                        {
+                                            try
+                                            {
+                                                if (item.NoAction is false) { UpdateNow(item.Key, item.Value); }
+                                                await Task.Delay(item.GetDuration, current_token).ConfigureAwait(false);
+                                            }
+                                            catch
+                                            {
+                                                canceled = true; break;
+                                            }
+                                        }
                                     }
                                 }
                             }
+                            while (macro_repeat_condition &&
+                                   macro_task_cancelflag is false &&
+                                   current_token.IsCancellationRequested is false);
                         }
+                        macro_task_is_running = false;
                     }
-                    while (macro_repeat_condition &&
-                           macro_task_cancelflag is false &&
-                           current_token.IsCancellationRequested is false);
+                    Print($"{macro_name} End {(canceled ? "(cancel a long-running delay task)" : string.Empty)}");
                 }
-                macro_task_is_running = false;
+                macro_cts_is_disposed = true;
             }
-            Print($"{macro_name} End {(canceled ? "(cancel a long-running delay task)" : string.Empty)}");
         }
 
         private void UpdateNow<T>(string propName, T propValue)
