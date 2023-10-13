@@ -54,6 +54,7 @@ namespace CustomMacroPlugin0.Tools.FlowManager
         bool[] macro_task_cancelflag = new bool[1] { false };
 
         CancellationTokenSource? macro_cts = null;
+        bool macro_cts_is_disposed = true;
         CancellationToken macro_token = default;
         bool macro_canceled = false;//flag: CancelFromLongDelayTime
 
@@ -65,8 +66,8 @@ namespace CustomMacroPlugin0.Tools.FlowManager
             if (macro_stop_condition)
             {
                 if (macro_task_is_running is false) { macro_task_locker = false; return; }
-                macro_task_cancelflag[0] = true;
-                macro_cts?.Cancel();
+                if (macro_task_cancelflag[0] is false) { macro_task_cancelflag[0] = true; }
+                if (macro_cts_is_disposed is false) { macro_cts?.Cancel(); }
             };
 
             if (macro_start_condition)
@@ -78,26 +79,32 @@ namespace CustomMacroPlugin0.Tools.FlowManager
 
                     ((Func<Task>)(async () =>
                     {
-                        macro_cts = new();
-                        macro_token = macro_cts.Token;
-                        macro_canceled = false;
-
-                        Print($"{macro_name} Start");
+                        using (macro_cts = new())
                         {
-                            macro_task_is_running = true;//二次上锁
+                            macro_cts_is_disposed = false;
                             {
-                                if (macro_actioninfo_list is not null)
+                                macro_token = macro_cts.Token;
+                                macro_canceled = false;
+
+                                Print($"{macro_name} Start");
                                 {
-                                    await Task.Run(() =>
+                                    macro_task_is_running = true;//二次上锁
                                     {
-                                        macro_actioninfo_list.FirstOrDefault(_ => _ is not null)?
-                                                             .Invoke(macro_act, macro_task_cancelflag, InnerWait);
-                                    }).ConfigureAwait(false);
+                                        if (macro_actioninfo_list is not null)
+                                        {
+                                            await Task.Run(() =>
+                                            {
+                                                macro_actioninfo_list.FirstOrDefault(_ => _ is not null)?
+                                                                     .Invoke(macro_act, macro_task_cancelflag, InnerWait);
+                                            }).ConfigureAwait(false);
+                                        }
+                                    }
+                                    macro_task_is_running = false;
                                 }
+                                Print($"{macro_name} End {(macro_canceled ? "(cancel a long-running delay task)" : string.Empty)}");
                             }
-                            macro_task_is_running = false;
+                            macro_cts_is_disposed = true;
                         }
-                        Print($"{macro_name} End {(macro_canceled ? "(cancel a long-running delay task)" : string.Empty)}");
                     }))();
                 }
             }

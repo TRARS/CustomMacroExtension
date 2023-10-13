@@ -114,6 +114,7 @@ namespace CustomMacroPlugin0.Tools.FlowManager
         bool macro_task_cancelflag = false;
 
         CancellationTokenSource? macro_cts = null;
+        bool macro_cts_is_disposed = true;
 
         Action? macro_act = null;
         Action? macro_act_pre = null;
@@ -123,8 +124,8 @@ namespace CustomMacroPlugin0.Tools.FlowManager
             if (macro_stop_condition)
             {
                 if (macro_task_is_running is false) { macro_task_locker = false; return; }
-                macro_task_cancelflag = true;
-                macro_cts?.Cancel();
+                if (macro_task_cancelflag is false) { macro_task_cancelflag = true; }
+                if (macro_cts_is_disposed is false) { macro_cts?.Cancel(); }
             };
 
             if (macro_start_condition)
@@ -136,49 +137,55 @@ namespace CustomMacroPlugin0.Tools.FlowManager
 
                     ((Func<Task>)(async () =>
                     {
-                        macro_cts = new();
-                        var current_token = macro_cts.Token;
-                        var canceled = false;
-
-                        Print($"{macro_name} Start");
+                        using (macro_cts = new())
                         {
-                            macro_task_is_running = true;//二次上锁
+                            macro_cts_is_disposed = false;
                             {
-                                do
+                                var current_token = macro_cts.Token;
+                                var canceled = false;
+
+                                Print($"{macro_name} Start");
                                 {
-                                    foreach (var item in macro_actioninfo_list)
+                                    macro_task_is_running = true;//二次上锁
                                     {
-                                        if (macro_task_cancelflag) { break; }
-
-                                        macro_act = item.Action;
-
-                                        var duration = item.GetDuration;
+                                        do
                                         {
-                                            if (duration < 100)
+                                            foreach (var item in macro_actioninfo_list)
                                             {
-                                                await Task.Delay(duration).ConfigureAwait(false);
-                                            }
-                                            else
-                                            {
-                                                try
+                                                if (macro_task_cancelflag) { break; }
+
+                                                macro_act = item.Action;
+
+                                                var duration = item.GetDuration;
                                                 {
-                                                    await Task.Delay(duration, current_token).ConfigureAwait(false);
-                                                }
-                                                catch
-                                                {
-                                                    canceled = true; break;
+                                                    if (duration < 100)
+                                                    {
+                                                        await Task.Delay(duration).ConfigureAwait(false);
+                                                    }
+                                                    else
+                                                    {
+                                                        try
+                                                        {
+                                                            await Task.Delay(duration, current_token).ConfigureAwait(false);
+                                                        }
+                                                        catch
+                                                        {
+                                                            canceled = true; break;
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
+                                        while (macro_repeat_condition &&
+                                               macro_task_cancelflag is false &&
+                                               current_token.IsCancellationRequested is false);
                                     }
+                                    macro_task_is_running = false;
                                 }
-                                while (macro_repeat_condition &&
-                                       macro_task_cancelflag is false &&
-                                       current_token.IsCancellationRequested is false);
+                                Print($"{macro_name} End {(canceled ? "(cancel a long-running delay task)" : string.Empty)}");
                             }
-                            macro_task_is_running = false;
+                            macro_cts_is_disposed = true;
                         }
-                        Print($"{macro_name} End {(canceled ? "(cancel a long-running delay task)" : string.Empty)}");
                     }))().ConfigureAwait(false);
                 }
             }

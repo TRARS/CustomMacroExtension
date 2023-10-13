@@ -109,6 +109,7 @@ namespace CustomMacroPlugin0.Tools.FlowManager
         bool macro_task_cancelflag = false;
 
         CancellationTokenSource? macro_cts = null;
+        bool macro_cts_is_disposed = true;
 
         DS4StateLite? temp = null;
 
@@ -117,8 +118,8 @@ namespace CustomMacroPlugin0.Tools.FlowManager
             if (macro_stop_condition)
             {
                 if (macro_task_is_running is false) { macro_task_locker = false; return; }
-                macro_task_cancelflag = true;
-                macro_cts?.Cancel();
+                if (macro_task_cancelflag is false) { macro_task_cancelflag = true; }
+                if (macro_cts_is_disposed is false) { macro_cts?.Cancel(); }
             };
 
             if (macro_start_condition)
@@ -130,10 +131,17 @@ namespace CustomMacroPlugin0.Tools.FlowManager
 
                     ((Func<Task>)(async () =>
                     {
-                        await foreach (var item in ComboFlow()) 
+                        using (macro_cts = new())
                         {
-                            //Print($"action_idx: {item}");
-                        };
+                            macro_cts_is_disposed = false;
+                            {
+                                await foreach (var item in ComboFlow())
+                                {
+                                    //Print($"action_idx: {item}");
+                                };
+                            }
+                            macro_cts_is_disposed = true;
+                        }
                     }))().ConfigureAwait(false);
                 }
             }
