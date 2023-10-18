@@ -654,7 +654,7 @@
             ValueIndicatorPacket
             </summary>
         </member>
-        <member name="M:CustomMacroBase.MacroBase.ValueIndicatorPacket.#ctor(System.String,System.Windows.Media.SolidColorBrush,System.Windows.Media.SolidColorBrush,System.Func{System.Double,System.Windows.Media.SolidColorBrush},System.Windows.Media.SolidColorBrush,System.Windows.Media.SolidColorBrush)">
+        <member name="M:CustomMacroBase.MacroBase.ValueIndicatorPacket.#ctor(System.String,System.Windows.Media.SolidColorBrush,System.Windows.Media.SolidColorBrush,System.Func{System.Double,System.Windows.Media.SolidColorBrush},System.Windows.Media.SolidColorBrush,System.Windows.Media.SolidColorBrush,System.Nullable{System.Windows.CornerRadius})">
             <summary>
             <para>propname:  属性名</para>
             <para>propnamecolor: 属性名的颜色</para>
