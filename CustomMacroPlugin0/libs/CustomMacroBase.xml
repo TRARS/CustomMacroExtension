@@ -408,6 +408,16 @@
             获取或设置滑块开关状态
             </summary>
         </member>
+        <member name="P:CustomMacroBase.PreBase.GateBase.HideSelf">
+            <summary>
+            获取或设置滑块开关整体显示状态
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.PreBase.GateBase.HideSliderButton">
+            <summary>
+            获取或设置滑块开关显示状态
+            </summary>
+        </member>
         <member name="P:CustomMacroBase.PreBase.GateBase.Opacity">
             <summary>
             该不透明度仅作用于ChildrenEx中的控件所在的容器
@@ -629,17 +639,17 @@
             获取两字符串相似度
             </summary>
         </member>
-        <member name="M:CustomMacroBase.MacroBase.CreateGateBase(System.String,System.Boolean,System.String)">
+        <member name="M:CustomMacroBase.MacroBase.CreateGateBase(System.String,System.Boolean,System.String,System.Boolean,System.Boolean)">
             <summary>
             CreateGateBase
             </summary>
         </member>
-        <member name="M:CustomMacroBase.MacroBase.CreateSlider(System.Double,System.Double,System.Object,System.String,System.Double,System.String,System.Double,System.String)">
+        <member name="M:CustomMacroBase.MacroBase.CreateSlider(System.Double,System.Double,System.Object,System.String,System.Double,System.String,System.Double,System.String,System.Boolean)">
             <summary>
             CreateSlider
             </summary>
         </member>
-        <member name="M:CustomMacroBase.MacroBase.CreateComboBox(System.Object,System.String,System.String,System.String,System.Int32)">
+        <member name="M:CustomMacroBase.MacroBase.CreateComboBox(System.Object,System.String,System.String,System.String,System.Int32,System.Boolean)">
             <summary>
             CreateComboBox
             </summary>
@@ -711,36 +721,6 @@
         <member name="M:CustomMacroBase.PixelMatcher.PixelMatcherBase.MatchText(System.Drawing.Rectangle,System.Boolean,System.String,System.String,System.Double)">
             <summary>
             范围找字_尝试识别区域内的文字，需指定语言 (Tesseract)
-            </summary>
-        </member>
-        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-            <summary>
-            GeneratedInternalTypeHelper
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-            <summary>
-            CreateInstance
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-            <summary>
-            GetPropertyValue
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-            <summary>
-            SetPropertyValue
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-            <summary>
-            CreateDelegate
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-            <summary>
-            AddEventHandler
             </summary>
         </member>
     </members>
