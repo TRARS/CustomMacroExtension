@@ -639,7 +639,7 @@
             获取两字符串相似度
             </summary>
         </member>
-        <member name="M:CustomMacroBase.MacroBase.CreateGateBase(System.String,System.Boolean,System.String,System.Boolean,System.Boolean)">
+        <member name="M:CustomMacroBase.MacroBase.CreateGateBase(System.String,System.Boolean,System.String,System.Boolean)">
             <summary>
             CreateGateBase
             </summary>
