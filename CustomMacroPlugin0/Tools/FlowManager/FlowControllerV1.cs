@@ -160,33 +160,33 @@ namespace CustomMacroPlugin0.Tools.FlowManager
                     {
                         macro_task_is_running = true;//二次上锁
                         {
-                            do
+                            try
                             {
-                                count = 0;
-                                temp = new() { LX = 128, LY = 128, RX = 128, RY = 128 };
-                                foreach (var item in macro_actioninfo_list)
+                                do
                                 {
-                                    if (macro_task_cancelflag) { break; }
-
-                                    var duration = item.GetDuration;
-                                    var token = duration < 100 ? CancellationToken.None : current_token;
+                                    count = 0;
+                                    temp = new() { LX = 128, LY = 128, RX = 128, RY = 128 };
+                                    foreach (var item in macro_actioninfo_list)
                                     {
-                                        try
+                                        if (macro_task_cancelflag) { break; }
+
+                                        var duration = item.GetDuration;
+                                        var token = duration < 100 ? CancellationToken.None : current_token;
                                         {
                                             if (item.NoAction is false) { UpdateNow(item.Key, item.Value); }
                                             await Task.Delay(duration, token).ConfigureAwait(false);
+                                            //yield return count++;
                                         }
-                                        catch
-                                        {
-                                            canceled = true; break;
-                                        }
-                                        yield return count++;
                                     }
                                 }
+                                while (macro_repeat_condition &&
+                                       macro_task_cancelflag is false);
                             }
-                            while (macro_repeat_condition &&
-                                   macro_task_cancelflag is false &&
-                                   current_token.IsCancellationRequested is false);
+                            catch
+                            {
+                                canceled = true;
+                            }
+                            yield return null;
                         }
                         macro_task_is_running = false;
                     }
