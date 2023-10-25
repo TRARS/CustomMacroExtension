@@ -148,37 +148,30 @@ namespace CustomMacroPlugin0.Tools.FlowManager
                                 {
                                     macro_task_is_running = true;//二次上锁
                                     {
-                                        do
+                                        try
                                         {
-                                            foreach (var item in macro_actioninfo_list)
+                                            do
                                             {
-                                                if (macro_task_cancelflag) { break; }
-
-                                                macro_act = item.Action;
-
-                                                var duration = item.GetDuration;
+                                                foreach (var item in macro_actioninfo_list)
                                                 {
-                                                    if (duration < 100)
+                                                    if (macro_task_cancelflag) { break; }
+
+                                                    macro_act = item.Action;
+
+                                                    var duration = item.GetDuration;
+                                                    var token = duration < 100 ? CancellationToken.None : current_token;
                                                     {
-                                                        await Task.Delay(duration).ConfigureAwait(false);
-                                                    }
-                                                    else
-                                                    {
-                                                        try
-                                                        {
-                                                            await Task.Delay(duration, current_token).ConfigureAwait(false);
-                                                        }
-                                                        catch
-                                                        {
-                                                            canceled = true; break;
-                                                        }
+                                                        await Task.Delay(duration, token).ConfigureAwait(false);
                                                     }
                                                 }
                                             }
+                                            while (macro_repeat_condition &&
+                                                   macro_task_cancelflag is false);
                                         }
-                                        while (macro_repeat_condition &&
-                                               macro_task_cancelflag is false &&
-                                               current_token.IsCancellationRequested is false);
+                                        catch
+                                        {
+                                            canceled = true;
+                                        }
                                     }
                                     macro_task_is_running = false;
                                 }

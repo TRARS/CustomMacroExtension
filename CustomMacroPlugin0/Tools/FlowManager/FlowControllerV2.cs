@@ -125,20 +125,14 @@ namespace CustomMacroPlugin0.Tools.FlowManager
         /// </summary>
         private bool InnerWait(int duration)
         {
-            if (duration < 100)
+            var token = duration < 100 ? CancellationToken.None : macro_token;
+            try
             {
-                Task.Delay(duration).Wait();
+                Task.Delay(duration, token).Wait();
             }
-            else
+            catch
             {
-                try
-                {
-                    Task.Delay(duration, macro_token).Wait();
-                }
-                catch
-                {
-                    macro_canceled = true; return true;
-                }
+                macro_canceled = true; return true;
             }
 
             return false;

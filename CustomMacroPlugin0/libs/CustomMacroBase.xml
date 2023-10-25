@@ -413,12 +413,12 @@
             获取或设置滑块开关整体显示状态
             </summary>
         </member>
-        <member name="P:CustomMacroBase.PreBase.GateBase.HideSliderButton">
+        <member name="P:CustomMacroBase.PreBase.GateBase.DisableSliderButton">
             <summary>
-            获取或设置滑块开关显示状态
+            获取或设置SliderButton状态
             </summary>
         </member>
-        <member name="P:CustomMacroBase.PreBase.GateBase.Opacity">
+        <member name="P:CustomMacroBase.PreBase.GateBase.ChildOpacity">
             <summary>
             该不透明度仅作用于ChildrenEx中的控件所在的容器
             </summary>

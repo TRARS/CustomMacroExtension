@@ -169,24 +169,18 @@ namespace CustomMacroPlugin0.Tools.FlowManager
                                     if (macro_task_cancelflag) { break; }
 
                                     var duration = item.GetDuration;
+                                    var token = duration < 100 ? CancellationToken.None : current_token;
                                     {
-                                        if (duration < 100)
+                                        try
                                         {
                                             if (item.NoAction is false) { UpdateNow(item.Key, item.Value); }
-                                            await Task.Delay(item.GetDuration).ConfigureAwait(false); yield return count++;
+                                            await Task.Delay(duration, token).ConfigureAwait(false);
                                         }
-                                        else
+                                        catch
                                         {
-                                            try
-                                            {
-                                                if (item.NoAction is false) { UpdateNow(item.Key, item.Value); }
-                                                await Task.Delay(item.GetDuration, current_token).ConfigureAwait(false);
-                                            }
-                                            catch
-                                            {
-                                                canceled = true; break;
-                                            }
+                                            canceled = true; break;
                                         }
+                                        yield return count++;
                                     }
                                 }
                             }
