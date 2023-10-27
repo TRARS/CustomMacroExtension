@@ -7,8 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using KeyboardKeys = System.Windows.Forms.Keys;
 
-namespace CustomMacroPlugin0.Tools.StaticManager
+namespace CustomMacroPlugin0.Tools.SendInputManager
 {
     //引用dll部分
     partial class SendKBMInput
@@ -113,35 +114,263 @@ namespace CustomMacroPlugin0.Tools.StaticManager
             Middle,
         }
 
+
         /// <summary>
         /// SendInput简化
         /// </summary>
         private static void PreSendInput(ref INPUT[] _inputs) => SendInput(_inputs.Length, ref _inputs[0], Marshal.SizeOf(_inputs[0]));
     }
 
-    //鼠标键盘代理（仅内部调用）
+
+
+
+    //计时器
     partial class SendKBMInput
     {
-        //鼠标
-        private partial class MouseProxy
+        private sealed class InnerTimer
         {
-            private Dictionary<int, bool> internalList = new() { };
-            private Dictionary<string, bool> internalListEx = new() { };
+            bool stop_condition = false;
 
-            private static readonly Lazy<MouseProxy> lazyObject = new(() => new MouseProxy());
-            public static MouseProxy Instance => lazyObject.Value;
+            bool task_locker = false;
+            bool flag = false;
 
-            private MouseProxy()
+            Func<DateTime, DateTime, int, bool> timeout = (a, b, c) => ((b).Subtract(a).TotalMilliseconds >= c);
+
+            public void Reset()
             {
-                foreach (var item in Enum.GetValues(typeof(MouseKeys)).Cast<MouseKeys>().ToList())
+                if (stop_condition is false) { stop_condition = true; }
+                if (task_locker) { task_locker = false; }
+                if (flag) { flag = false; }
+            }
+
+            /// <summary>
+            /// 长按时间小于_threshold返回false，否则返回true
+            /// </summary>
+            public bool CoolDown(int _threshold)
+            {
+                if (task_locker is false && flag is false)
                 {
-                    if (internalList.ContainsKey((short)item) is false) internalList.Add((short)item, false);
+                    stop_condition = false;
+
+                    var starttime = DateTime.Now; //计时开始
+
+                    Task.Run(async () =>
+                    {
+                        task_locker = true;
+                        {
+                            await Task.Yield();
+
+                            while (timeout.Invoke(starttime, DateTime.Now, _threshold) is false && stop_condition is false)
+                            {
+                                await Task.Delay(32);// 延迟设置较低，不需要传入token来取消
+                            }
+
+                            flag = (stop_condition is false); //true
+                        }
+                        task_locker = false;
+                    }).ConfigureAwait(false);
+                }
+
+                return flag;
+            }
+        }
+    }
+
+    //键鼠通用按键状态机
+    partial class SendKBMInput
+    {
+        //状态
+        private abstract class KeyState<T>
+        {
+            public abstract Action? NextState { get; init; }
+            public abstract void Press(T[] keys);
+            public abstract void Release(T[] keys);
+            public static void Print(string str) => Mediator.Instance.NotifyColleagues(MessageType.PrintNewMessage, str);
+        }
+        private class KeyPressed<T> : KeyState<T>
+        {
+            public Action<T>? SendKeyUp { get; init; }
+            public override Action? NextState { get; init; }
+            public override void Press(T[] keys) { }
+            public override void Release(T[] keys)
+            {
+                //弹起
+                foreach (var key in keys) { SendKeyUp?.Invoke(key); }
+
+                //打印
+                Print($"Release : {string.Join(" + ", keys)}");
+
+                //状态转换为已弹起
+                NextState?.Invoke();
+            }
+        }
+        private class KeyReleased<T> : KeyState<T>
+        {
+            public Action<T>? SendKeyDown { get; init; }
+            public override Action? NextState { get; init; }
+            public override void Press(T[] keys)
+            {
+                //按下
+                foreach (var key in keys) { SendKeyDown?.Invoke(key); }
+
+                //打印
+                Print($"Press : {string.Join(" + ", keys)}");
+
+                //状态转换为已按下
+                NextState?.Invoke();
+            }
+            public override void Release(T[] keys) { }
+        }
+
+        //状态机
+        private sealed class KeyStateMachine<T>
+        {
+            private readonly InnerTimer innerTimer = new();//计时器安排个
+
+            private bool task_locker = false;
+            private CancellationTokenSource? task_cts = null;
+            private bool task_cts_is_disposed = false;
+
+            private bool auto_cycle_flag = false;
+            private int auto_cycle_duration = 0;
+            private int auto_cycle_activation_duration = 0;
+
+            private T[] currentKeys = Array.Empty<T>();
+            private bool isCompositeKey => currentKeys.Length >= 2;
+            private KeyState<T>? currentState = null;
+            private readonly KeyState<T>? pressedState = null;
+            private readonly KeyState<T>? releasedState = null;
+
+            //构造
+            public KeyStateMachine(T[] keys, Action<T>? keyup, Action<T>? keydown)
+            {
+                pressedState = new KeyPressed<T>() { NextState = () => { this.currentState = releasedState; }, SendKeyUp = keyup };
+                releasedState = new KeyReleased<T>() { NextState = () => { this.currentState = pressedState; }, SendKeyDown = keydown };
+
+                currentKeys = keys;
+                currentState = releasedState;//默认状态已弹起
+            }
+            public void SetCycleOptions(int cycleActivationDuration, int cycleDuration)
+            {
+                auto_cycle_activation_duration = cycleActivationDuration;
+                auto_cycle_duration = cycleDuration;
+            }
+            public void Update(bool press, bool allow_auto_cycle)
+            {
+                //长按后激活循环
+                if (allow_auto_cycle && isCompositeKey is false)
+                {
+                    if (press && innerTimer.CoolDown(auto_cycle_activation_duration))
+                    {
+                        auto_cycle_flag = true; PressReleaseCycle(); return;
+                    }
+                    else if (press is false)
+                    {
+                        auto_cycle_flag = false; PressReleaseCycle(); innerTimer.Reset();
+                    }
+                }
+
+                //常规按下弹起
+                switch (press)
+                {
+                    case true:
+                        currentState?.Press(currentKeys); break;
+                    case false:
+                        currentState?.Release(currentKeys); break;
                 }
             }
 
-            private void SendMouseMove(Point pt)
+            //循环
+            private void PressReleaseCycle()
             {
-                Win32Point mousePosition = new Win32Point
+                if (auto_cycle_flag is false)
+                {
+                    if (task_cts_is_disposed is false) { task_cts?.Cancel(); }
+                    task_locker = false;
+                    return;
+                }
+
+                if (task_locker is false)
+                {
+                    task_locker = true;
+
+                    Task.Run(async () =>
+                    {
+                        await Task.Yield();
+
+                        using (task_cts = new())
+                        {
+                            task_cts_is_disposed = false;
+                            {
+                                var token = task_cts.Token;
+                                try
+                                {
+                                    do
+                                    {
+                                        currentState?.Release(currentKeys);
+                                        await Task.Delay(auto_cycle_duration, token);
+                                        currentState?.Press(currentKeys);
+                                        await Task.Delay(auto_cycle_duration, token);
+                                    }
+                                    while (auto_cycle_flag && token.IsCancellationRequested is false);
+                                }
+                                catch { }
+                                finally { currentState?.Release(currentKeys); }
+                            }
+                            task_cts_is_disposed = true;
+                        }
+                    }).ContinueWith(_ => { task_locker = false; }).ConfigureAwait(false);
+                }
+            }
+        }
+    }
+
+    //键鼠代理（仅内部调用）
+    partial class SendKBMInput
+    {
+        //键鼠代理抽象
+        private abstract class KBMProxy<T> where T : Enum
+        {
+            public readonly Dictionary<T, KeyStateMachine<T>> StateMachineList = new();
+            public readonly Dictionary<string, KeyStateMachine<T>> CombineStateMachineList = new();
+
+            public int cycleActivationDuration;
+            public int cycleDuration;
+
+            public KBMProxy()
+            {
+                foreach (var item in Enum.GetValues(typeof(T)).Cast<T>().ToList())
+                {
+                    StateMachineList.TryAdd(item, new KeyStateMachine<T>(new T[] { item }, SendKeyUp, SendKeyDown));
+                }
+            }
+
+            //键鼠通用
+            public abstract Action<T>? SendKeyDown { get; }
+            public abstract Action<T>? SendKeyUp { get; }
+            public abstract void Update(T[] keys, bool press, bool autorelease = false);
+
+            //鼠标专用
+            public virtual Action<Point>? SendMouseMove { get; }
+            public virtual void Update(Point pt) { }
+
+            //设置循环参数用
+            public void Options(int _cycleActivationDuration, int _cycleDuration)
+            {
+                cycleActivationDuration = _cycleActivationDuration;
+                cycleDuration = _cycleDuration;
+            }
+        }
+
+        //鼠标代理实现
+        private class MouseProxy : KBMProxy<MouseKeys>
+        {
+            private static readonly Lazy<MouseProxy> lazyObject = new(() => new());
+            public static MouseProxy Instance => lazyObject.Value;
+
+            public override Action<Point> SendMouseMove => (pt) =>
+            {
+                Win32Point mousePosition = new()
                 {
                     X = (int)(pt.X * ((double)65535 / System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width)),
                     Y = (int)(pt.Y * ((double)65535 / System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height))
@@ -165,8 +394,8 @@ namespace CustomMacroPlugin0.Tools.StaticManager
                 };
 
                 PreSendInput(ref inputs_move);
-            }
-            private void SendMouseDown(int key)
+            };
+            public override Action<MouseKeys> SendKeyDown => (key) =>
             {
                 //Down
                 INPUT[] inputs_click = new INPUT[]
@@ -175,7 +404,7 @@ namespace CustomMacroPlugin0.Tools.StaticManager
                         type = INPUT_MOUSE,
                         ui = new INPUT_UNION {
                             mouse = new MOUSEINPUT {
-                                dwFlags = key,//MOUSEEVENTF_LEFTDOWN
+                                dwFlags = PressOrRelease.Invoke(key, true),//MOUSEEVENTF_LEFTDOWN
                                 dx = 0,
                                 dy = 0,
                                 mouseData = 0,
@@ -187,8 +416,8 @@ namespace CustomMacroPlugin0.Tools.StaticManager
                 };
 
                 PreSendInput(ref inputs_click);
-            }
-            private void SendMouseUp(int key)
+            };
+            public override Action<MouseKeys> SendKeyUp => (key) =>
             {
                 //Up
                 INPUT[] inputs_click = new INPUT[]
@@ -197,7 +426,7 @@ namespace CustomMacroPlugin0.Tools.StaticManager
                         type = INPUT_MOUSE,
                         ui = new INPUT_UNION {
                             mouse = new MOUSEINPUT {
-                                dwFlags = key,//MOUSEEVENTF_LEFTUP
+                                dwFlags = PressOrRelease.Invoke(key, false),//MOUSEEVENTF_LEFTUP
                                 dx = 0,
                                 dy = 0,
                                 mouseData = 0,
@@ -209,80 +438,50 @@ namespace CustomMacroPlugin0.Tools.StaticManager
                 };
 
                 PreSendInput(ref inputs_click);
-            }
-
-            private int PressOrRelease(int key, bool flag)
+            };
+            private Func<MouseKeys, bool, int> PressOrRelease = (key, flag) =>
             {
-                return (MouseKeys)key switch
+                return key switch
                 {
                     MouseKeys.Left => flag ? MOUSEEVENTF_LEFTDOWN : MOUSEEVENTF_LEFTUP,
                     MouseKeys.Right => flag ? MOUSEEVENTF_RIGHTDOWN : MOUSEEVENTF_RIGHTUP,
                     MouseKeys.Middle => flag ? MOUSEEVENTF_MIDDLEDOWN : MOUSEEVENTF_MIDDLEUP,
                     _ => 0
                 };
-            }
+            };
 
-            public void Update(Point pt)
+            public override void Update(Point pt)
             {
-                SendMouseMove(pt);
+                SendMouseMove.Invoke(pt);
             }
-            public void Update(MouseKeys[] keys, bool flag)
+            public override void Update(MouseKeys[] keys, bool mouseFlag, bool autoRelease = false)
             {
                 if (keys.Length == 1)
                 {
-                    int key = (int)keys[0];
-                    if (flag is true && internalList[key] is false)
-                    {
-                        SendMouseDown(PressOrRelease(key, flag)); internalList[key] = true;
-                    }
-                    if (flag is false && internalList[key] is true)
-                    {
-                        SendMouseUp(PressOrRelease(key, flag)); internalList[key] = false;
-                    }
+                    var key = keys[0];
+                    var target = base.StateMachineList[key];
+                    target?.SetCycleOptions(base.cycleActivationDuration, base.cycleDuration);
+                    target?.Update(mouseFlag, autoRelease);
                 }
-                else
+                else if (keys.Length > 1)
                 {
-                    string key = "combine";
+                    var key = "Combine";
                     foreach (var item in keys) { key = $"{key}_{item}"; }
-
-                    if (internalListEx.ContainsKey(key) is false) { internalListEx.Add(key, true); }
-
-                    if (flag is true && internalListEx[key] is false)
-                    {
-                        foreach (var item in keys) { SendMouseDown(PressOrRelease((int)item, flag)); }
-                        internalListEx[key] = true;
-                    }
-
-                    if (flag is false && internalListEx[key] is true)
-                    {
-                        foreach (var item in keys) { SendMouseUp(PressOrRelease((int)item, flag)); }
-                        internalListEx[key] = false;
-                    }
+                    base.CombineStateMachineList.TryAdd(key, new(keys, SendKeyUp, SendKeyDown));
+                    var target = base.CombineStateMachineList[key];
+                    //target?.SetCycleOptions(base.cycleActivationDuration, base.cycleDuration);
+                    target?.Update(mouseFlag, false);
                 }
             }
-
         }
 
-        //键盘
-        private partial class KeyBoardProxy
+        //键盘代理实现
+        private class KeyboardProxy : KBMProxy<KeyboardKeys>
         {
-            private Dictionary<short, KeyStateMachine> internalKeyStateMachineList = new() { };
-            private Dictionary<string, KeyStateMachine> internalCombineKeyStateMachineList = new() { };
-            private int cycleActivationDuration;
-            private int cycleDuration;
+            private static readonly Lazy<KeyboardProxy> lazyObject = new(() => new KeyboardProxy());
+            public static KeyboardProxy Instance => lazyObject.Value;
 
-            private static readonly Lazy<KeyBoardProxy> lazyObject = new(() => new KeyBoardProxy());
-            public static KeyBoardProxy Instance => lazyObject.Value;
-
-            private KeyBoardProxy()
-            {
-                foreach (var item in Enum.GetValues(typeof(Keys)).Cast<Keys>().ToList())
-                {
-                    internalKeyStateMachineList.TryAdd((short)item, new KeyStateMachine(new Keys[] { item }, SendKeyUp, SendKeyDown));
-                }
-            }
-
-            private void SendKeyDown(short key)
+            public override Action<KeyboardKeys> SendKeyDown => (key) =>
             {
                 INPUT[] inputs_key = new INPUT[]
                 {
@@ -293,7 +492,7 @@ namespace CustomMacroPlugin0.Tools.StaticManager
                         {
                             keyboard = new KEYBDINPUT
                             {
-                                wVk = key,
+                                wVk = (short)key,
                                 wScan = (short)MapVirtualKey((uint)key, 0),
                                 dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYDOWN,
                                 dwExtraInfo = IntPtr.Zero,
@@ -303,8 +502,8 @@ namespace CustomMacroPlugin0.Tools.StaticManager
                     },
                 };
                 PreSendInput(ref inputs_key);
-            }
-            private void SendKeyUp(short key)
+            };
+            public override Action<KeyboardKeys> SendKeyUp => (key) =>
             {
                 INPUT[] inputs_key = new INPUT[]
                 {
@@ -315,7 +514,7 @@ namespace CustomMacroPlugin0.Tools.StaticManager
                         {
                             keyboard = new KEYBDINPUT
                             {
-                                wVk = key,
+                                wVk = (short)key,
                                 wScan = (short)MapVirtualKey((uint)key, 0),
                                 dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP,
                                 dwExtraInfo = IntPtr.Zero,
@@ -325,34 +524,31 @@ namespace CustomMacroPlugin0.Tools.StaticManager
                     }
                 };
                 PreSendInput(ref inputs_key);
-            }
+            };
 
-            public void Update(Keys[] keys, bool flag, bool autorelease = false)
+            public override void Update(KeyboardKeys[] keys, bool keyboardFlag, bool autoRelease = false)
             {
                 if (keys.Length == 1)
                 {
                     var key = keys[0];
-                    var target = internalKeyStateMachineList[(short)key];
-                    target?.SetCycleOptions(cycleActivationDuration, cycleDuration);
-                    target?.Update(flag ? KeyFlag.Press : KeyFlag.Release, autorelease);
+                    var target = base.StateMachineList[key];
+                    target?.SetCycleOptions(base.cycleActivationDuration, base.cycleDuration);
+                    target?.Update(keyboardFlag, autoRelease);
                 }
-
-                if (keys.Length > 1)
+                else if (keys.Length > 1)
                 {
-                    string key = "Combine";
+                    var key = "Combine";
                     foreach (var item in keys) { key = $"{key}_{item}"; }
-                    internalCombineKeyStateMachineList.TryAdd(key, new(keys, SendKeyUp, SendKeyDown));
-                    var target = new KeyStateMachine(keys, SendKeyUp, SendKeyDown);
-                    target?.Update(flag ? KeyFlag.Press : KeyFlag.Release, false);
+                    base.CombineStateMachineList.TryAdd(key, new(keys, SendKeyUp, SendKeyDown));
+                    var target = base.CombineStateMachineList[key];
+                    //target?.SetCycleOptions(base.cycleActivationDuration, base.cycleDuration);
+                    target?.Update(keyboardFlag, false);
                 }
-            }
-            public void Options(int _cycleActivationDuration, int _cycleDuration)
-            {
-                cycleActivationDuration = _cycleActivationDuration;
-                cycleDuration = _cycleDuration;
             }
         }
     }
+
+
 
 
     //单击鼠标或键盘（供外部调用）
@@ -371,7 +567,7 @@ namespace CustomMacroPlugin0.Tools.StaticManager
             {
                 mouse_task_is_running = true;
                 {
-                    Win32Point mousePosition = new Win32Point
+                    Win32Point mousePosition = new()
                     {
                         X = (int)(pt.X * ((double)65535 / System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width)),
                         Y = (int)(pt.Y * ((double)65535 / System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height))
@@ -436,7 +632,7 @@ namespace CustomMacroPlugin0.Tools.StaticManager
         /// <para>键盘某键按下&amp;弹起</para>
         /// <para>参数 key：类似 (short)WinForm.Keys.A 这样</para>
         /// </summary>
-        public static void SendKeyBoardClick(System.Windows.Forms.Keys key)
+        public static void SendKeyBoardClick(KeyboardKeys key)
         {
             if (keyboard_task_is_running is false)
             {
@@ -498,7 +694,7 @@ namespace CustomMacroPlugin0.Tools.StaticManager
         /// <summary>
         /// <para>鼠标某键按下</para>
         /// <para>参数 flag：true按下 false弹起</para>
-        /// <para>参数 keys：一次性按多个键，Key数组</para>
+        /// <para>参数 keys：一次性按多个键，MouseKey数组</para>
         /// </summary>
         public static void MouseDown(bool flag, params MouseKeys[] keys)
         {
@@ -506,238 +702,35 @@ namespace CustomMacroPlugin0.Tools.StaticManager
         }
 
 
+
         /// <summary>
         /// <para>键盘某键按下</para>
         /// <para>参数 flag：true按下 false弹起</para>
         /// <para>参数 keys：一次性按多个键，Key数组（比如填'<see cref="System.Windows.Forms.Keys.Enter"/>'）</para>
+        /// <para>禁用自动连发</para>
         /// </summary>
         public static void KeyDown(bool flag, params Keys[] keys)
         {
-            KeyBoardProxy.Instance.Update(keys, flag);
+            KeyboardProxy.Instance.Update(keys, flag);
         }
         /// <summary>
         /// <para>键盘某键按下，长按后激活连发（组合键不激活连发）</para>
         /// <para>参数 flag：true按下 false弹起</para>
         /// <para>参数 keys：一次性按多个键，Key数组（比如填'<see cref="System.Windows.Forms.Keys.Enter"/>'）</para>
+        /// <para>启用自动连发</para>
         /// </summary>
         public static void KeyDownEx(bool flag, params Keys[] keys)
         {
-            KeyBoardProxy.Instance.Update(keys, flag, true);
+            KeyboardProxy.Instance.Update(keys, flag, true);
         }
-
         /// <summary>
         /// 设置连发相关延时
+        /// <para>参数 cycleActivationDuration：激活连发所需长按耗时（毫秒）</para>
+        /// <para>参数 cycleDuration：按下与弹起之间的延时（毫秒），值越小连发频率越高</para>
         /// </summary>
-        public static void KeyCycleOptions(int cycleActivationDuration, int cycleDuration)
+        public static void KeyboardCycleOptions(int cycleActivationDuration, int cycleDuration)
         {
-            KeyBoardProxy.Instance.Options(cycleActivationDuration, cycleDuration);
-        }
-    }
-
-
-    //计时器
-    partial class SendKBMInput
-    {
-        private sealed class InnerTimer
-        {
-            bool stop_condition = false;
-
-            bool task_locker = false;
-            bool flag = false;
-
-            Func<DateTime, DateTime, int, bool> timeout = (a, b, c) => ((b).Subtract(a).TotalMilliseconds >= c);
-
-            public void Reset()
-            {
-                if (stop_condition is false) { stop_condition = true; }
-                if (task_locker) { task_locker = false; }
-                if (flag) { flag = false; }
-            }
-
-            /// <summary>
-            /// 长按时间小于_threshold返回false，否则返回true
-            /// </summary>
-            public bool CoolDown(int _threshold)
-            {
-                if (task_locker is false && flag is false)
-                {
-                    stop_condition = false;
-
-                    var starttime = DateTime.Now; //计时开始
-
-                    Task.Run(async () =>
-                    {
-                        task_locker = true;
-                        {
-                            await Task.Yield();
-
-                            while (timeout.Invoke(starttime, DateTime.Now, _threshold) is false && stop_condition is false)
-                            {
-                                await Task.Delay(32);// 延迟设置较低，不需要传入token来取消
-                            }
-
-                            flag = (stop_condition is false); //true
-                        }
-                        task_locker = false;
-                    }).ConfigureAwait(false);
-                }
-
-                return flag;
-            }
-        }
-    }
-
-    //按键状态机
-    partial class SendKBMInput
-    {
-        private interface KeyState
-        {
-            abstract Action? NextState { get; init; }
-            abstract void Press(Keys[] keys);
-            abstract void Release(Keys[] keys);
-        }
-        private class KeyStatePressed : KeyState
-        {
-            public Action? NextState { get; init; }
-            public Action<short>? SendKeyUp { get; init; }
-            public void Press(Keys[] keys) { }
-            public void Release(Keys[] keys)
-            {
-                //弹起
-                foreach (var key in keys)
-                {
-                    SendKeyUp?.Invoke((short)key);
-                    Mediator.Instance.NotifyColleagues(MessageType.PrintNewMessage, $"Release :{key}");
-                }
-
-                //状态转换为已弹起
-                NextState?.Invoke();
-            }
-        }
-        private class KeyStateReleased : KeyState
-        {
-            public Action? NextState { get; init; }
-            public Action<short>? SendKeyDown { get; init; }
-            public void Press(Keys[] keys)
-            {
-                //按下
-                foreach (var key in keys)
-                {
-                    SendKeyDown?.Invoke((short)key);
-                    Mediator.Instance.NotifyColleagues(MessageType.PrintNewMessage, $"Press :{key}");
-                }
-
-                //状态转换为已按下
-                NextState?.Invoke();
-            }
-            public void Release(Keys[] keys) { }
-        }
-
-        private enum KeyFlag
-        {
-            Press,
-            Release,
-        }
-
-        private sealed class KeyStateMachine
-        {
-            private readonly InnerTimer innerTimer = new();//计时器安排个
-
-            private bool task_locker = false;
-            private CancellationTokenSource? task_cts = null;
-            private bool task_cts_is_disposed;
-
-            private bool auto_cycle_flag = false;
-            private int auto_cycle_duration = 0;
-            private int auto_cycle_activation_duration = 0;
-
-            private Keys[] currentKeys = new Keys[0];
-            private KeyState? currentState = null;
-            private readonly KeyState? pressed = null;
-            private readonly KeyState? released = null;
-
-
-            public KeyStateMachine(Keys[] keys, Action<short> keyup, Action<short> keydown)
-            {
-                pressed = new KeyStatePressed() { NextState = () => { this.currentState = released; }, SendKeyUp = keyup };
-                released = new KeyStateReleased() { NextState = () => { this.currentState = pressed; }, SendKeyDown = keydown };
-
-                currentKeys = keys;
-                currentState = released;//默认状态已弹起
-            }
-            public void SetCycleOptions(int cycleActivationDuration, int cycleDuration)
-            {
-                auto_cycle_activation_duration = cycleActivationDuration;
-                auto_cycle_duration = cycleDuration;
-            }
-            public void Update(KeyFlag flag, bool auto_cycle_onoff)
-            {
-                //长按后激活循环
-                if (auto_cycle_onoff)
-                {
-                    if (flag == KeyFlag.Press && innerTimer.CoolDown(auto_cycle_activation_duration))
-                    {
-                        auto_cycle_flag = true; PressReleaseCycle(); return;
-                    }
-                    if (flag == KeyFlag.Release)
-                    {
-                        auto_cycle_flag = false; PressReleaseCycle(); innerTimer.Reset();
-                    }
-                }
-
-                //常规按下弹起
-                switch (flag)
-                {
-                    case KeyFlag.Press:
-                        currentState?.Press(currentKeys); break;
-                    case KeyFlag.Release:
-                        currentState?.Release(currentKeys); break;
-                    default: break;
-                }
-            }
-
-            //
-            private void PressReleaseCycle()
-            {
-                if (auto_cycle_flag is false)
-                {
-                    if (task_cts_is_disposed is false) { task_cts?.Cancel(); }
-                    task_locker = false;
-                    return;
-                }
-
-                if (task_locker is false)
-                {
-                    task_locker = true;
-
-                    Task.Run(async () =>
-                    {
-                        await Task.Yield();
-
-                        using (task_cts = new())
-                        {
-                            task_cts_is_disposed = false;
-                            {
-                                var token = task_cts.Token;
-                                try
-                                {
-                                    do
-                                    {
-                                        currentState?.Release(currentKeys);
-                                        await Task.Delay(auto_cycle_duration, token);
-                                        currentState?.Press(currentKeys);
-                                        await Task.Delay(auto_cycle_duration, token);
-                                    }
-                                    while (auto_cycle_flag && token.IsCancellationRequested is false);
-                                }
-                                catch { }
-                                finally { currentState?.Release(currentKeys); }
-                            }
-                            task_cts_is_disposed = true;
-                        }
-                    }).ContinueWith(_ => { task_locker = false; }).ConfigureAwait(false);
-                }
-            }
+            KeyboardProxy.Instance.Options(cycleActivationDuration, cycleDuration);
         }
     }
 }

@@ -28,18 +28,6 @@ namespace CustomMacroPlugin0.Tools.TimeManager
                     }))();
                 }
             }
-
-            //public async Task Run(Action<Stopwatch> action)
-            //{
-            //    if (task_is_running is false)
-            //    {
-            //        task_is_running = true;
-
-            //        await Task.Run(() => { action.Invoke(stopwatch); }).ConfigureAwait(false);
-
-            //        task_is_running = false;
-            //    }
-            //}
         }
     }
 

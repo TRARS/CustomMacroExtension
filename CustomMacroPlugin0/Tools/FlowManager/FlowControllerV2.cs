@@ -125,7 +125,7 @@ namespace CustomMacroPlugin0.Tools.FlowManager
         /// </summary>
         private bool InnerWait(int duration)
         {
-            if(duration < 100)
+            if (duration < 100)
             {
                 Task.Delay(duration).Wait();
             }
