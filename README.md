@@ -1,5 +1,5 @@
 # CustomMacroExtension
-* This is a macro plugin project only work on the [`custom build of DS4Windows(3.2.17)`](https://github.com/TRARS/DS4Windows)  
+* This is a macro plugin project only work on the [`custom build of DS4Windows(3.2.19)`](https://github.com/TRARS/DS4Windows)  
 * With this project we can focus on writing macros using C#  
 
 ## How to use

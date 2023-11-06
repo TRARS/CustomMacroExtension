@@ -154,7 +154,7 @@ namespace CustomMacroPlugin0.Tools.FlowManager
                 {
                     var current_token = macro_cts.Token;
                     var canceled = false;
-                    var count = 0;
+                    //var count = 0;
 
                     Print($"{macro_name} Start");
                     {
@@ -164,14 +164,14 @@ namespace CustomMacroPlugin0.Tools.FlowManager
                             {
                                 do
                                 {
-                                    count = 0;
+                                    //count = 0;
                                     temp = new() { LX = 128, LY = 128, RX = 128, RY = 128 };
                                     foreach (var item in macro_actioninfo_list)
                                     {
                                         if (macro_task_cancelflag) { break; }
 
                                         var duration = item.GetDuration;
-                                        var token = duration < 100 ? CancellationToken.None : current_token;
+                                        var token = duration < 120 ? CancellationToken.None : current_token;
                                         {
                                             if (item.NoAction is false) { UpdateNow(item.Key, item.Value); }
                                             await Task.Delay(duration, token).ConfigureAwait(false);

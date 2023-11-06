@@ -159,7 +159,7 @@ namespace CustomMacroPlugin0.Tools.FlowManager
                                                     macro_act = item.Action;
 
                                                     var duration = item.GetDuration;
-                                                    var token = duration < 100 ? CancellationToken.None : current_token;
+                                                    var token = duration < 120 ? CancellationToken.None : current_token;
                                                     {
                                                         await Task.Delay(duration, token).ConfigureAwait(false);
                                                     }

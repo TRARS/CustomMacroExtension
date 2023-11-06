@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using KeyboardKeys = System.Windows.Forms.Keys;
 
 namespace CustomMacroPlugin0.Tools.SendInputManager
@@ -113,7 +112,6 @@ namespace CustomMacroPlugin0.Tools.SendInputManager
             Right,
             Middle,
         }
-
 
         /// <summary>
         /// SendInput简化
@@ -252,8 +250,8 @@ namespace CustomMacroPlugin0.Tools.SendInputManager
             }
             public void SetCycleOptions(int cycleActivationDuration, int cycleDuration)
             {
-                auto_cycle_activation_duration = cycleActivationDuration;
-                auto_cycle_duration = cycleDuration;
+                if (auto_cycle_activation_duration != cycleActivationDuration) { auto_cycle_activation_duration = cycleActivationDuration; }
+                if (auto_cycle_duration != cycleDuration) { auto_cycle_duration = cycleDuration; }
             }
             public void Update(bool press, bool allow_auto_cycle)
             {
@@ -345,7 +343,7 @@ namespace CustomMacroPlugin0.Tools.SendInputManager
             //键鼠通用
             public abstract Action<T>? SendKeyDown { get; }
             public abstract Action<T>? SendKeyUp { get; }
-            public abstract void Update(T[] keys, bool press, bool autorelease = false, int cycleActivationDuration = 0, int cycleDuration = 0);
+            public abstract void Update(string specialKey, T[] keys, bool press, bool autorelease = false, int cycleActivationDuration = 0, int cycleDuration = 0);
 
             //鼠标专用
             public virtual Action<Point>? SendMouseMove { get; }
@@ -444,28 +442,13 @@ namespace CustomMacroPlugin0.Tools.SendInputManager
             {
                 SendMouseMove.Invoke(pt);
             }
-            public override void Update(MouseKeys[] keys, bool mouseFlag, bool autoRelease = false, int cycleActivationDuration = 0, int cycleDuration = 0)
+            public override void Update(string specialKey, MouseKeys[] keys, bool mouseFlag, bool autoCycle = false, int cycleActivationDuration = 0, int cycleDuration = 0)
             {
-                if (keys.Length == 1)
-                {
-                    var key = keys[0];
-                    var target = base.StateMachineList[key];
-                    target?.SetCycleOptions(cycleActivationDuration, cycleDuration);
-                    target?.Update(mouseFlag, autoRelease);
-                }
-                else if (keys.Length > 1)
-                {
-                    var key = "Combine";
-                    foreach (var item in keys) { key = $"{key}_{item}"; }
-                    base.CombineStateMachineList.TryAdd(key, new(keys, SendKeyUp, SendKeyDown));
-                    var target = base.CombineStateMachineList[key];
-                    target?.SetCycleOptions(cycleActivationDuration, cycleDuration);
-                    target?.Update(mouseFlag, false);
-                }
-            }
-            public void SetCycleOptions()
-            {
-
+                var key = $"{specialKey}_{string.Join("_", keys)}";
+                base.CombineStateMachineList.TryAdd(key, new(keys, SendKeyUp, SendKeyDown));
+                var target = base.CombineStateMachineList[key];
+                target?.SetCycleOptions(cycleActivationDuration, cycleDuration);
+                target?.Update(mouseFlag, autoCycle);
             }
         }
 
@@ -520,24 +503,13 @@ namespace CustomMacroPlugin0.Tools.SendInputManager
                 PreSendInput(ref inputs_key);
             };
 
-            public override void Update(KeyboardKeys[] keys, bool keyboardFlag, bool autoRelease = false, int cycleActivationDuration = 0, int cycleDuration = 0)
+            public override void Update(string specialKey, KeyboardKeys[] keys, bool keyboardFlag, bool autoCycle = false, int cycleActivationDuration = 0, int cycleDuration = 0)
             {
-                if (keys.Length == 1)
-                {
-                    var key = keys[0];
-                    var target = base.StateMachineList[key];
-                    target?.SetCycleOptions(cycleActivationDuration, cycleDuration);
-                    target?.Update(keyboardFlag, autoRelease);
-                }
-                else if (keys.Length > 1)
-                {
-                    var key = "Combine";
-                    foreach (var item in keys) { key = $"{key}_{item}"; }
-                    base.CombineStateMachineList.TryAdd(key, new(keys, SendKeyUp, SendKeyDown));
-                    var target = base.CombineStateMachineList[key];
-                    target?.SetCycleOptions(cycleActivationDuration, cycleDuration);
-                    target?.Update(keyboardFlag, false);
-                }
+                var key = $"{specialKey}_{string.Join("_", keys)}";
+                base.CombineStateMachineList.TryAdd(key, new(keys, SendKeyUp, SendKeyDown));
+                var target = base.CombineStateMachineList[key];
+                target?.SetCycleOptions(cycleActivationDuration, cycleDuration);
+                target?.Update(keyboardFlag, autoCycle);
             }
         }
     }
@@ -701,46 +673,49 @@ namespace CustomMacroPlugin0.Tools.SendInputManager
         /// <para>参数 keys：一次性按多个键，MouseKey数组</para>
         /// <para>禁用自动连发</para>
         /// </summary>
-        public static void MouseDown(bool flag, params MouseKeys[] keys)
+        public static void MouseDown(string specialKey, bool flag, params MouseKeys[] keys)
         {
-            MouseProxy.Instance.Update(keys, flag);
+            MouseProxy.Instance.Update(specialKey, keys, flag);
         }
         /// <summary>
         /// <para>鼠标某键按下</para>
+        /// <para>参数 specialKey：用作访问字典的唯一key</para>
         /// <para>参数 flag：true按下 false弹起</para>
         /// <para>参数 keys：一次性按多个键，MouseKey数组</para>
-        /// <para>参数 autoRelease：是否启用自动连发</para>
+        /// <para>参数 autoCycle：是否启用自动连发</para>
         /// <para>参数 cycleActivationDuration：启用自动连发时，长按直至激活自动连发所需耗时（毫秒）</para>
         /// <para>参数 cycleDuration：启用自动连发时，按下与弹起之间的延时（毫秒）</para>
         /// </summary>
-        public static void MouseDownEx(bool flag, MouseKeys[] keys, bool autoRelease, int cycleActivationDuration = 0, int cycleDuration = 0)
+        public static void MouseDownEx(string specialKey, bool flag, MouseKeys[] keys, bool autoCycle, int cycleActivationDuration = 0, int cycleDuration = 0)
         {
-            MouseProxy.Instance.Update(keys, flag, autoRelease, cycleActivationDuration, cycleDuration);
+            MouseProxy.Instance.Update(specialKey, keys, flag, autoCycle, cycleActivationDuration, cycleDuration);
         }
 
 
 
         /// <summary>
         /// <para>键盘某键按下</para>
+        /// <para>参数 specialKey：用作访问字典的唯一key</para>
         /// <para>参数 flag：true按下 false弹起</para>
         /// <para>参数 keys：一次性按多个键，Key数组（比如填'<see cref="System.Windows.Forms.Keys.Enter"/>'）</para>
         /// <para>禁用自动连发</para>
         /// </summary>
-        public static void KeyDown(bool flag, params Keys[] keys)
+        public static void KeyDown(string specialKey, bool flag, params KeyboardKeys[] keys)
         {
-            KeyboardProxy.Instance.Update(keys, flag, false);
+            KeyboardProxy.Instance.Update(specialKey, keys, flag, false);
         }
         /// <summary>
         /// <para>键盘某键按下</para>
+        /// <para>参数 specialKey：用作访问字典的唯一key</para>
         /// <para>参数 flag：true按下 false弹起</para>
         /// <para>参数 keys：一次性按多个键，Key数组（比如填'<see cref="System.Windows.Forms.Keys.Enter"/>'）</para>
-        /// <para>参数 autoRelease：是否启用自动连发</para>
+        /// <para>参数 autoCycle：是否启用自动连发</para>
         /// <para>参数 cycleActivationDuration：启用自动连发时，长按直至激活自动连发所需耗时（毫秒）</para>
         /// <para>参数 cycleDuration：启用自动连发时，按下与弹起之间的延时（毫秒）</para>
         /// </summary>
-        public static void KeyDownEx(bool flag, Keys[] keys, bool autoRelease, int cycleActivationDuration = 0, int cycleDuration = 0)
+        public static void KeyDownEx(string specialKey, bool flag, KeyboardKeys[] keys, bool autoCycle, int cycleActivationDuration = 0, int cycleDuration = 0)
         {
-            KeyboardProxy.Instance.Update(keys, flag, autoRelease, cycleActivationDuration, cycleDuration);
+            KeyboardProxy.Instance.Update(specialKey, keys, flag, autoCycle, cycleActivationDuration, cycleDuration);
         }
     }
 }
