@@ -418,11 +418,6 @@
             获取或设置SliderButton状态
             </summary>
         </member>
-        <member name="P:CustomMacroBase.PreBase.GateBase.ChildOpacity">
-            <summary>
-            该不透明度仅作用于ChildrenEx中的控件所在的容器
-            </summary>
-        </member>
         <member name="P:CustomMacroBase.PreBase.GateBase.Children">
             <summary>
             获取当前滑块开关的子项列表，用以存放与宿主类型相同的对象
