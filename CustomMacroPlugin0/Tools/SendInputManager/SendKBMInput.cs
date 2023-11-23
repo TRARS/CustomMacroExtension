@@ -329,15 +329,15 @@ namespace CustomMacroPlugin0.Tools.SendInputManager
         //键鼠代理抽象
         private abstract class KBMProxy<T> where T : Enum
         {
-            public readonly Dictionary<T, KeyStateMachine<T>> StateMachineList = new();
+            //public readonly Dictionary<T, KeyStateMachine<T>> StateMachineList = new();
             public readonly Dictionary<string, KeyStateMachine<T>> CombineStateMachineList = new();
 
             public KBMProxy()
             {
-                foreach (var item in Enum.GetValues(typeof(T)).Cast<T>().ToList())
-                {
-                    StateMachineList.TryAdd(item, new KeyStateMachine<T>(new T[] { item }, SendKeyUp, SendKeyDown));
-                }
+                //foreach (var item in Enum.GetValues(typeof(T)).Cast<T>().ToList())
+                //{
+                //    StateMachineList.TryAdd(item, new KeyStateMachine<T>(new T[] { item }, SendKeyUp, SendKeyDown));
+                //}
             }
 
             //键鼠通用

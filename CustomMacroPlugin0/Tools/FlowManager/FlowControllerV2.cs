@@ -105,7 +105,7 @@ namespace CustomMacroPlugin0.Tools.FlowManager
                             }
                             macro_cts_is_disposed = true;
                         }
-                    }))();
+                    }))().ConfigureAwait(false);
                 }
             }
             else
