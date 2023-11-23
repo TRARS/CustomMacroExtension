@@ -24,7 +24,9 @@ namespace CustomMacroPlugin0.Tools.TimeManager
             {
                 if (starttime is null)//长按期间该块仅执行一次
                 {
-                    threshold ??= _threshold;
+                    if (threshold != _threshold) { threshold = _threshold; }
+                    if (threshold == 0) { return true; }
+
                     starttime = starttime_lp = endtime = DateTime.Now;
                     ((Func<Task>)(async () =>
                     {
