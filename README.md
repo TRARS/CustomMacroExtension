@@ -71,7 +71,7 @@ namespace CustomMacroPlugin0.GameListSample
 
         public override void Init()
         {
-            MainGate.Text = "Slain Albinauric mobs. All macros are activated by pressing □ and termination upon pressing ○.";
+            MainGate.Text = "Slain Albinauric mobs. All macros are activated by pressing □ and termination upon pressing ○";
 
             MainGate.Add(CreateGateBase("Sacred Relic Sword V0", groupName: "jmB!$h@T"));
             MainGate.Add(CreateGateBase("Sacred Relic Sword V1", groupName: "jmB!$h@T"));
@@ -110,7 +110,7 @@ namespace CustomMacroPlugin0.GameListSample
         private void Macro0()
         {
             Macro0_Flow.Start_Condition = RealDS4.Square;//Activated by pressing □
-            Macro0_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○.
+            Macro0_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○ button
             Macro0_Flow.Repeat_Condition = true;//Automatic Loop
             Macro0_Flow.ExecuteMacro();
         }
@@ -147,25 +147,25 @@ namespace CustomMacroPlugin0.GameListSample
         private void Macro1()
         {
             Macro1_Flow.Start_Condition = RealDS4.Square;//Activated by pressing □
-            Macro1_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○.
+            Macro1_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○ button
             Macro1_Flow.Repeat_Condition = true;//Automatic Loop
             Macro1_Flow.ExecuteMacro(VirtualDS4);//※ Unlike V0, we need to pass VirtualDS4 as a parameter here.
         }
     }
 
-    //Sacred Relic Sword V2 —— During macro execution, we are unable to operate any buttons.
+    //Sacred Relic Sword V2 —— During macro execution, we can still operate buttons that are not utilized within the macro.
     partial class Game_Sample1
     {
         FlowControllerV2? Macro2_Flow;
 
         private void Macro2()
         {
-            Macro2_Flow ??= new("Sacred Relic Sword V2", () => { VirtualDS4.Square = false; })
+            Macro2_Flow ??= new("Sacred Relic Sword V2", () => { VirtualDS4.Square = false; }) //Before each action in the macro is executed, □ will be released.
             {
                 (x, y, z) => { Macro2_Detail(ref x[0], ref y[0], ref z); }
             };
             Macro2_Flow.Start_Condition = RealDS4.Square;//Activated by pressing □
-            Macro2_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○.
+            Macro2_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○ button
             Macro2_Flow.ExecuteMacro();
         }
 
@@ -341,7 +341,7 @@ namespace CustomMacroPlugin0.GameListSample
         private void Macro0()
         {
             Macro0_Flow.Start_Condition = RealDS4.Square; //Activated by pressing □
-            Macro0_Flow.Stop_Condition = RealDS4.Square is false; //Termination upon releasing □.
+            Macro0_Flow.Stop_Condition = RealDS4.Square is false; //Termination upon releasing □
             Macro0_Flow.Repeat_Condition = true;
             Macro0_Flow.ExecuteMacro();
         }
@@ -372,7 +372,7 @@ namespace CustomMacroPlugin0.GameListSample
             };
 
             Macro1_Flow.Start_Condition = RealDS4.Circle;  //Activated by pressing ○
-            Macro1_Flow.Stop_Condition = RealDS4.Circle is false;  //Termination upon releasing ○.
+            Macro1_Flow.Stop_Condition = RealDS4.Circle is false;  //Termination upon releasing ○
             Macro1_Flow.Repeat_Condition = true;
             Macro1_Flow.ExecuteMacro();
         }
