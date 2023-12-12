@@ -341,7 +341,7 @@ namespace CustomMacroPlugin0.GameListSample
         private void Macro0()
         {
             Macro0_Flow.Start_Condition = RealDS4.Square; //Activated by pressing □
-            Macro0_Flow.Stop_Condition = RealDS4.Square is false; //Termination upon releasing □ button.
+            Macro0_Flow.Stop_Condition = RealDS4.Square is false; //Termination upon releasing □.
             Macro0_Flow.Repeat_Condition = true;
             Macro0_Flow.ExecuteMacro();
         }
@@ -372,7 +372,7 @@ namespace CustomMacroPlugin0.GameListSample
             };
 
             Macro1_Flow.Start_Condition = RealDS4.Circle;  //Activated by pressing ○
-            Macro1_Flow.Stop_Condition = RealDS4.Circle is false;  //Termination upon releasing ○ button.
+            Macro1_Flow.Stop_Condition = RealDS4.Circle is false;  //Termination upon releasing ○.
             Macro1_Flow.Repeat_Condition = true;
             Macro1_Flow.ExecuteMacro();
         }
