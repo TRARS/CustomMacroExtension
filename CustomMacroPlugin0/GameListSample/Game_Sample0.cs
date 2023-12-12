@@ -1,22 +1,21 @@
 ﻿using CustomMacroBase;
 using CustomMacroBase.Helper.Attributes;
 
-//This sample only adds three Toggle buttons on the UI interface.
+//This sample only adds three Toggle buttons on the UI.
 //It does not implement macros,
 //but only shows how to add Toggle buttons.
 namespace CustomMacroPlugin0.GameListSample
 {
     [SortIndex(200)]
-    [DoNotLoad]
     partial class Game_Sample0 : MacroBase
     {
         public override void Init()
         {
-            MainGate.Text = "Sample0_主开关";
+            MainGate.Text = "Main_ToggleButton";
 
-            MainGate.Add(new() { Text = "子开关0", Enable = true });
-            MainGate.Add(new() { Text = "子开关1", Enable = true });
-            MainGate.Add(new() { Text = "子开关2", Enable = true });
+            MainGate.Add(CreateGateBase("Sub_ToggleButton_0"));
+            MainGate.Add(CreateGateBase("Sub_ToggleButton_1"));
+            MainGate.Add(CreateGateBase("Sub_ToggleButton_2"));
         }
 
         public override void UpdateState()

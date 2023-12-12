@@ -34,6 +34,298 @@
             记录编译时间
             </summary>
         </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV0.Action">
+            <summary>
+            待执行的动作
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV0.Duration">
+            <summary>
+            动作持续时间（毫秒）
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV0.DurationFunc">
+            <summary>
+            动作持续时间（毫秒）（以委托的形式接收）
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV0.#ctor(System.Int32)">
+            <summary>
+            <para>参数_duration：空动作持续时间（毫秒）</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV0.#ctor(System.Func{System.Int32})">
+            <summary>
+            <para>参数_durationfunc：空动作持续时间（毫秒）（以委托的形式接收）</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV0.#ctor(System.Action,System.Int32)">
+            <summary>
+            <para>动作打包</para>
+            <para>参数_action：待执行的动作</para>
+            <para>参数_duration：动作持续时间（毫秒）</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV0.#ctor(System.Action,System.Func{System.Int32})">
+            <summary>
+            <para>动作打包</para>
+            <para>参数_action：待执行的动作</para>
+            <para>参数_durationfunc：动作持续时间（毫秒）（以委托的形式接收）</para>
+            </summary>
+        </member>
+        <member name="T:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV0">
+            <summary>
+            <para>脚本执行时，不会影响来自真实手柄的其他操作</para>
+            <para>适用场景：辅助搓招 or 挂机</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV0.#ctor(System.String,System.Action)">
+            <summary>
+            <para>_macroName：脚本名</para>
+            <para>_macro_act_pre：额外动作，用以在脚本中的每个动作被执行前优先弹起某些按键以避免冲突</para>
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV0.Start_Condition">
+            <summary>
+            该值为true时触发脚本
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV0.Stop_Condition">
+            <summary>
+            该值为true时中断脚本
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV0.Repeat_Condition">
+            <summary>
+            该值为true时令脚本可以循环
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV1.Key">
+            <summary>
+            按键名
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV1.Value">
+            <summary>
+            按键值
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV1.Duration">
+            <summary>
+            按键持续时间
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV1.DurationFunc">
+            <summary>
+            按键持续时间（委托版）
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV1.#ctor(System.Int32)">
+            <summary>
+            <para>参数_duration：状态持续时间（毫秒）</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV1.#ctor(System.String,System.Byte,System.Int32)">
+            <summary>
+            <para>动作打包</para>
+            <para>参数_key：按键名</para>
+            <para>参数_value：按键状态</para>
+            <para>参数_duration：按键状态持续时间（毫秒）</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV1.#ctor(System.String,System.Boolean,System.Int32)">
+            <summary>
+            <para>动作打包</para>
+            <para>参数_key：按键名</para>
+            <para>参数_value：按键状态</para>
+            <para>参数_duration：按键状态持续时间（毫秒）</para>
+            </summary>
+        </member>
+        <member name="T:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV1">
+            <summary>
+            <para>脚本执行时，将完全无视任何来自真实手柄的操作</para>
+            <para>适用场景：挂机</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV1.#ctor(System.String)">
+            <summary>
+            <para>_macroName：脚本名</para>
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV1.Start_Condition">
+            <summary>
+            该值为true时触发脚本
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV1.Stop_Condition">
+            <summary>
+            该值为true时中断脚本
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV1.Repeat_Condition">
+            <summary>
+            该值为true时令脚本可以循环
+            </summary>
+        </member>
+        <member name="T:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV2">
+            <summary>
+            <para>脚本执行时，不会影响来自真实手柄的其他操作</para>
+            <para>适用场景：挂机 + 找图/找色/找数字（FindImage/FindColor/FindNumber）</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV2.#ctor(System.String,System.Action)">
+            <summary>
+            <para>_macroName：脚本名</para>
+            <para>_macro_act_pre：额外动作，用以在脚本中的每个动作被执行前优先弹起某些按键以避免冲突</para>
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV2.Start_Condition">
+            <summary>
+            该值为true时触发脚本
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV2.Stop_Condition">
+            <summary>
+            该值为true时中断脚本
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV2.InnerWait(System.Int32)">
+            <summary>
+            从较长的延时任务中取消时，返回true，否则返回false
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.OtherManager.ActionController.#ctor(System.Int32)">
+            <summary>
+            _cooldown：动作的冷却时间
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.OtherManager.ActionController.Start_Condition">
+            <summary>
+            该值为true时触发动作
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.OtherManager.StickFixInfo.#ctor(System.Int32,System.Double,System.Double)">
+            <summary>
+            <para>_a：内圈死区&amp;反死区(0~127)</para>
+            <para>_b：输出放大(128~640)</para>
+            <para>_c：外圈死区(64~180)</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.OtherManager.StickController.#ctor(CustomMacroBase.Helper.Tools.OtherManager.StickFixInfo,CustomMacroBase.Helper.Tools.OtherManager.StickFixInfo)">
+            <summary>
+            <para>_ls：左摇杆修正参数</para>
+            <para>_rs：右摇杆修正参数</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.PreSendInput(CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.INPUT[]@)">
+            <summary>
+            SendInput简化
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.InnerTimer.CoolDown(System.Int32)">
+            <summary>
+            长按时间小于_threshold返回false，否则返回true
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.SendMouseLeftClick(System.Windows.Point)">
+            <summary>
+            <para>鼠标左键单击</para>
+            <para>参数 pt：绝对坐标</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.SendKeyBoardClick(System.Windows.Forms.Keys)">
+            <summary>
+            <para>键盘某键按下&amp;弹起</para>
+            <para>参数 key：类似 (short)WinForm.Keys.A 这样</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.SendBlockInput(System.Boolean)">
+            <summary>
+            <para>禁用键鼠输入，仅在管理员模式下有效</para>
+            <para>※ 无法禁用数位板/数位屏输入</para>
+            </summary>
+            <param name="flag"></param>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.MouseMove(System.Windows.Point)">
+            <summary>
+            <para>鼠标移动</para>
+            <para>参数 point：绝对坐标</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.MouseDown(System.String,System.Boolean,CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.MouseKeys[])">
+            <summary>
+            <para>鼠标某键按下</para>
+            <para>参数 flag：true按下 false弹起</para>
+            <para>参数 keys：一次性按多个键，MouseKey数组</para>
+            <para>禁用自动连发</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.MouseDownEx(System.String,System.Boolean,CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.MouseKeys[],System.Boolean,System.Int32,System.Int32)">
+            <summary>
+            <para>鼠标某键按下</para>
+            <para>参数 specialKey：用作访问字典的唯一key</para>
+            <para>参数 flag：true按下 false弹起</para>
+            <para>参数 keys：一次性按多个键，MouseKey数组</para>
+            <para>参数 autoCycle：是否启用自动连发</para>
+            <para>参数 cycleActivationDuration：启用自动连发时，长按直至激活自动连发所需耗时（毫秒）</para>
+            <para>参数 cycleDuration：启用自动连发时，按下与弹起之间的延时（毫秒）</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.KeyDown(System.String,System.Boolean,System.Windows.Forms.Keys[])">
+            <summary>
+            <para>键盘某键按下</para>
+            <para>参数 specialKey：用作访问字典的唯一key</para>
+            <para>参数 flag：true按下 false弹起</para>
+            <para>参数 keys：一次性按多个键，Key数组（比如填'<see cref="F:System.Windows.Forms.Keys.Enter"/>'）</para>
+            <para>禁用自动连发</para>
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.KeyDownEx(System.String,System.Boolean,System.Windows.Forms.Keys[],System.Boolean,System.Int32,System.Int32)">
+            <summary>
+            <para>键盘某键按下</para>
+            <para>参数 specialKey：用作访问字典的唯一key</para>
+            <para>参数 flag：true按下 false弹起</para>
+            <para>参数 keys：一次性按多个键，Key数组（比如填'<see cref="F:System.Windows.Forms.Keys.Enter"/>'）</para>
+            <para>参数 autoCycle：是否启用自动连发</para>
+            <para>参数 cycleActivationDuration：启用自动连发时，长按直至激活自动连发所需耗时（毫秒）</para>
+            <para>参数 cycleDuration：启用自动连发时，按下与弹起之间的延时（毫秒）</para>
+            </summary>
+        </member>
+        <member name="T:CustomMacroBase.Helper.Tools.TimeManager.CooldownTimer.InnerTimer">
+            <summary>
+            内部计时器类
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Tools.TimeManager.CooldownTimer.InnerTimer.Elapsed(System.Int32)">
+            <summary>
+            <para>_threshold：<see cref="T:System.Int32"/>类型，超时阈值（比如填'100'，则当持续访问该方法时，于100毫秒内返回false，于100毫秒后返回true）</para>
+            </summary>
+        </member>
+        <member name="F:CustomMacroBase.Helper.Tools.TimeManager.CooldownTimer.internalList">
+            <summary>
+            内部字典
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.TimeManager.CooldownTimer.Item(System.String)">
+            <summary>
+            通过key访问内部计时器
+            </summary>
+        </member>
+        <member name="T:CustomMacroBase.Helper.Tools.TimeManager.StopwatchTask.InternalTask">
+            <summary>
+            内部Task
+            </summary>
+        </member>
+        <member name="F:CustomMacroBase.Helper.Tools.TimeManager.StopwatchTask.internalList">
+            <summary>
+            内部字典
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.TimeManager.StopwatchTask.Item(System.String)">
+            <summary>
+            通过key访问内部Task
+            </summary>
+        </member>
         <member name="T:CustomMacroBase.Helper.GDI32">
             <summary>
             Helper class containing Gdi32 API functions
