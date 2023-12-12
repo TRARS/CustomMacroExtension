@@ -18,9 +18,9 @@ namespace CustomMacroPlugin0.GameListSample
         {
             MainGate.Text = "Slain Albinauric mobs. All macros are activated by pressing □ and termination upon pressing ○.";
 
+            MainGate.Add(CreateGateBase("Sacred Relic Sword V0", groupName: "jmB!$h@T"));
             MainGate.Add(CreateGateBase("Sacred Relic Sword V1", groupName: "jmB!$h@T"));
             MainGate.Add(CreateGateBase("Sacred Relic Sword V2", groupName: "jmB!$h@T"));
-            MainGate.Add(CreateGateBase("Sacred Relic Sword V3", groupName: "jmB!$h@T"));
         }
 
         public override void UpdateState()

@@ -73,9 +73,9 @@ namespace CustomMacroPlugin0.GameListSample
         {
             MainGate.Text = "Slain Albinauric mobs. All macros are activated by pressing □ and termination upon pressing ○.";
 
+            MainGate.Add(CreateGateBase("Sacred Relic Sword V0", groupName: "jmB!$h@T"));
             MainGate.Add(CreateGateBase("Sacred Relic Sword V1", groupName: "jmB!$h@T"));
             MainGate.Add(CreateGateBase("Sacred Relic Sword V2", groupName: "jmB!$h@T"));
-            MainGate.Add(CreateGateBase("Sacred Relic Sword V3", groupName: "jmB!$h@T"));
         }
 
         public override void UpdateState()
@@ -110,7 +110,7 @@ namespace CustomMacroPlugin0.GameListSample
         private void Macro0()
         {
             Macro0_Flow.Start_Condition = RealDS4.Square;//Activated by pressing □
-            Macro0_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○ button.
+            Macro0_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○.
             Macro0_Flow.Repeat_Condition = true;//Automatic Loop
             Macro0_Flow.ExecuteMacro();
         }
@@ -147,7 +147,7 @@ namespace CustomMacroPlugin0.GameListSample
         private void Macro1()
         {
             Macro1_Flow.Start_Condition = RealDS4.Square;//Activated by pressing □
-            Macro1_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○ button.
+            Macro1_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○.
             Macro1_Flow.Repeat_Condition = true;//Automatic Loop
             Macro1_Flow.ExecuteMacro(VirtualDS4);//※ Unlike V0, we need to pass VirtualDS4 as a parameter here.
         }
@@ -165,7 +165,7 @@ namespace CustomMacroPlugin0.GameListSample
                 (x, y, z) => { Macro2_Detail(ref x[0], ref y[0], ref z); }
             };
             Macro2_Flow.Start_Condition = RealDS4.Square;//Activated by pressing □
-            Macro2_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○ button.
+            Macro2_Flow.Stop_Condition = RealDS4.Circle;//Termination upon pressing ○.
             Macro2_Flow.ExecuteMacro();
         }
 
