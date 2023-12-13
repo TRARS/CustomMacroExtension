@@ -1,9 +1,8 @@
 ﻿using CustomMacroBase;
 using CustomMacroBase.Helper.Attributes;
 
-//This sample only adds three Toggle buttons on the UI.
-//It does not implement macros,
-//but only shows how to add Toggle buttons.
+//This sample introduces three Toggle buttons to the UI.
+//It focuses on demonstrating the addition of Toggle buttons and does not implement macros.
 namespace CustomMacroPlugin0.GameListSample
 {
     [SortIndex(200)]

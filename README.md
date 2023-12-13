@@ -19,9 +19,8 @@ When crafting macro classes, please observe the following limitations:
 using CustomMacroBase;
 using CustomMacroBase.Helper.Attributes;
 
-//This sample only adds three Toggle buttons on the UI.
-//It does not implement macros,
-//but only shows how to add Toggle buttons.
+//This sample introduces three Toggle buttons to the UI.
+//It focuses on demonstrating the addition of Toggle buttons and does not implement macros.
 namespace CustomMacroPlugin0.GameListSample
 {
     [SortIndex(200)]
@@ -234,7 +233,6 @@ using CustomMacroBase.Helper.Attributes;
 using CustomMacroBase.Helper.Tools.FlowManager;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 //This sample illustrates how to use the built-in Slider and ComboBox.
 namespace CustomMacroPlugin0.GameListSample
@@ -254,11 +252,7 @@ namespace CustomMacroPlugin0.GameListSample
 
             private static ObservableCollection<string> ConvertEnumToObservableCollection<T>() where T : Enum
             {
-                var enumValues = Enum.GetValues(typeof(T)).Cast<T>();
-                var stringValues = enumValues.Select(e => e.ToString());
-                var observableCollection = new ObservableCollection<string>(stringValues);
-
-                return observableCollection;
+                return new ObservableCollection<string>(Enum.GetNames(typeof(T)));
             }
         }
 

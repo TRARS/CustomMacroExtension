@@ -4,7 +4,6 @@ using CustomMacroBase.Helper.Attributes;
 using CustomMacroBase.Helper.Tools.FlowManager;
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 //This sample illustrates how to use the built-in Slider and ComboBox.
 namespace CustomMacroPlugin0.GameListSample
@@ -24,11 +23,7 @@ namespace CustomMacroPlugin0.GameListSample
 
             private static ObservableCollection<string> ConvertEnumToObservableCollection<T>() where T : Enum
             {
-                var enumValues = Enum.GetValues(typeof(T)).Cast<T>();
-                var stringValues = enumValues.Select(e => e.ToString());
-                var observableCollection = new ObservableCollection<string>(stringValues);
-
-                return observableCollection;
+                return new ObservableCollection<string>(Enum.GetNames(typeof(T)));
             }
         }
 
