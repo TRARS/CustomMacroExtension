@@ -21,7 +21,7 @@ using CustomMacroBase.Helper.Attributes;
 
 //This sample introduces three Toggle buttons to the UI.
 //It focuses on demonstrating the addition of Toggle buttons and does not implement macros.
-namespace CustomMacroPlugin0.GameListSample
+namespace CustomMacroPlugin1.MacroSample
 {
     [SortIndex(200)]
     partial class Game_Sample0 : MacroBase
@@ -61,7 +61,7 @@ using System.Collections.Generic;
 
 //This sample introduces three Toggle buttons to the UI, with each button corresponding to a distinct macro.
 //This simplifies the process of macro creation, making it more user-friendly.
-namespace CustomMacroPlugin0.GameListSample
+namespace CustomMacroPlugin1.MacroSample
 {
     [SortIndex(201)]
     partial class Game_Sample1 : MacroBase
@@ -235,7 +235,7 @@ using System;
 using System.Collections.ObjectModel;
 
 //This sample illustrates how to use the built-in Slider and ComboBox.
-namespace CustomMacroPlugin0.GameListSample
+namespace CustomMacroPlugin1.MacroSample
 {
     partial class Game_Sample2
     {

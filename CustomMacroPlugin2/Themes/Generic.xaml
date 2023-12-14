@@ -1,0 +1,11 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:CustomMacroPlugin2">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/CustomMacroPlugin2;component/MacroSample/Game_JoyConMapper/Packet/UI/cJoyConMapper_style.xaml"/>
+        <ResourceDictionary Source="/CustomMacroPlugin2;component/MacroSample/Game_Recorder/Packet/UI/cRecorder_style.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
+</ResourceDictionary>

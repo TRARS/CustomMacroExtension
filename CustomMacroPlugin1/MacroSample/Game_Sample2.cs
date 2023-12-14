@@ -6,7 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 
 //This sample illustrates how to use the built-in Slider and ComboBox.
-namespace CustomMacroPlugin0.GameListSample
+namespace CustomMacroPlugin1.MacroSample
 {
     partial class Game_Sample2
     {

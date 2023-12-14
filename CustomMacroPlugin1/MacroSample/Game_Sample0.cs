@@ -3,7 +3,7 @@ using CustomMacroBase.Helper.Attributes;
 
 //This sample introduces three Toggle buttons to the UI.
 //It focuses on demonstrating the addition of Toggle buttons and does not implement macros.
-namespace CustomMacroPlugin0.GameListSample
+namespace CustomMacroPlugin1.MacroSample
 {
     [SortIndex(200)]
     partial class Game_Sample0 : MacroBase

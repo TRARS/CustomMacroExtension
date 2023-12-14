@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 //This sample introduces three Toggle buttons to the UI, with each button corresponding to a distinct macro.
 //This simplifies the process of macro creation, making it more user-friendly.
-namespace CustomMacroPlugin0.GameListSample
+namespace CustomMacroPlugin1.MacroSample
 {
     [SortIndex(201)]
     partial class Game_Sample1 : MacroBase

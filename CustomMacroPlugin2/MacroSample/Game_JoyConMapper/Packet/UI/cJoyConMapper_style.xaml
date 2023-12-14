@@ -1,0 +1,407 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI" 
+                    xmlns:scrollviewerex="clr-namespace:CustomMacroBase.CustomControlEx.ScrollViewerEx;assembly=CustomMacroBase"
+                    x:Class="CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI.cJoyConMapper_event">
+
+    <local:cJoyConMapper_converter_enum2string x:Key="cJoyConMapper_converter_enum2string"/>
+    <local:cJoyConMapper_converter_nullablemargin2margin x:Key="cJoyConMapper_converter_nullablemargin2margin"/>
+    <local:cJoyConMapper_converter_nullablemargin2visibility x:Key="cJoyConMapper_converter_nullablemargin2visibility"/>
+    <local:cJoyConMapper_converter_bool2selectedidx x:Key="cJoyConMapper_converter_bool2selectedidx"/>
+
+    <!--StripeTexture-->
+    <VisualBrush x:Key="StripeTexture" TileMode="Tile" Viewport="0,0,3,3" ViewportUnits="Absolute" Viewbox="0,0,15,15" ViewboxUnits="Absolute">
+        <VisualBrush.Visual>
+            <Grid Background="Transparent" RenderTransformOrigin="0.5,0.5" Opacity="0.1">
+                <Path Data="M 0,15 L 15,0" Stroke="White" StrokeThickness="5" Opacity="0.4" />
+                <Path Data="M 15,15 L 30,0" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
+                <Path Data="M 15,-15 L 0,0" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
+                <Path Data="M 0,30 L 15,15" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
+                <Path Data="M 0,0 L -15,15" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
+            </Grid>
+        </VisualBrush.Visual>
+    </VisualBrush>
+
+
+    <!--ListBoxItem_ComboBoxTextBox-->
+    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#454851"/>
+    <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+        <!-- This must be named as PART_ContentHost -->
+        <Border Focusable="False" Background="{TemplateBinding Background}">
+            <Grid>
+                <Rectangle             Grid.Column="0" Grid.ColumnSpan="2" Fill="White" Opacity="0.3" RadiusX="2" RadiusY="2" />
+                <Rectangle x:Name="bk" Grid.Column="0" Grid.ColumnSpan="2" Fill="DarkGray" Opacity="0.1" RadiusX="2" RadiusY="2" />
+
+                <scrollviewerex:cScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"
+                                              VerticalAlignment="Center" Margin="4,0,0,0" Opacity="0">
+                </scrollviewerex:cScrollViewer>
+            </Grid>
+        </Border>
+    </ControlTemplate>
+    <!--ToggleButtonControlTemplate1-->
+    <ControlTemplate x:Key="ToggleButtonControlTemplate1" TargetType="{x:Type ToggleButton}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualStateGroup.Transitions>
+                        <VisualTransition From="MouseOver" GeneratedDuration="0:0:0.1" To="Normal"/>
+                    </VisualStateGroup.Transitions>
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="MouseOver">
+                        <Storyboard>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="BlueRect">
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="Arrow">
+                                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FFDCDFE1"/>
+                            </ColorAnimationUsingKeyFrames>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="BlueRect">
+                                <EasingColorKeyFrame KeyTime="0:0:0.1" Value="#FF5D94F0"/>
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                    <VisualState x:Name="Pressed"/>
+                    <VisualState x:Name="Disabled">
+                        <Storyboard>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="GlowRect">
+                                <EasingColorKeyFrame KeyTime="0" Value="#FF919191"/>
+                            </ColorAnimationUsingKeyFrames>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(SolidColorBrush.Color)" Storyboard.TargetName="GlassRect">
+                                <EasingColorKeyFrame KeyTime="0" Value="#FF919191"/>
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+
+            <Rectangle x:Name="BlueRect" Grid.Column="1" Fill="#FF236BE1" HorizontalAlignment="Left" Height="21.24" RadiusY="0" RadiusX="0" VerticalAlignment="Top" Width="20" Opacity="0"/>
+            <Rectangle Grid.ColumnSpan="2" HorizontalAlignment="Stretch" x:Name="GlowRect" VerticalAlignment="Stretch" Width="Auto" Height="Auto" RadiusX="0" RadiusY="0" Stroke="Black">
+                <Rectangle.Fill>
+                    <RadialGradientBrush Center="0.5,0.98" GradientOrigin="0.5,0.98">
+                        <GradientStop Color="#00FFF7F7"/>
+                        <GradientStop Offset="1" Color="#00AE9CFF"/>
+                    </RadialGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Path Grid.Column="1" HorizontalAlignment="Center" x:Name="Arrow" VerticalAlignment="Center" Fill="#444" Data="M 0 0 L 4 4 L 8 0 Z"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="true"/>
+            <Trigger Property="IsChecked" Value="true"/>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--ListBoxItem_ComboBox-->
+    <Style x:Key="cJoyconMapperComboBox" TargetType="{x:Type ComboBox}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="SnapsToDevicePixels" Value="true"/>
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ComboBox}">
+                    <Grid>
+                        <!--背景色-->
+                        <Rectangle             Grid.Column="0" Grid.ColumnSpan="2" Fill="White" Opacity="1" RadiusX="2" RadiusY="2" />
+                        <Rectangle x:Name="bk" Grid.Column="0" Grid.ColumnSpan="2" Fill="DarkRed" Opacity="0" RadiusX="2" RadiusY="2" />
+
+                        <!-- The ToggleButton is databound to the ComboBox itself to toggle IsDropDownOpen -->
+                        <ToggleButton  Opacity="0.01" Grid.Column="2" Template="{StaticResource ToggleButtonControlTemplate1}" x:Name="ToggleButton" Focusable="false" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press"/>
+                        <!--<ContentPresenter HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="ContentSite" VerticalAlignment="Center" Content="{TemplateBinding SelectionBoxItem}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" IsHitTestVisible="False"/>-->
+                        <TextBlock x:Name="ContentSite" 
+                                   HorizontalAlignment="Left" Margin="3,3,23,3" 
+                                   VerticalAlignment="Center"
+                                   Text="{TemplateBinding SelectionBoxItem, Converter={StaticResource cJoyConMapper_converter_enum2string}}" 
+                                   Foreground="Black" 
+                                   IsHitTestVisible="False"/>
+
+                        <!-- The TextBox must be named PART_EditableTextBox or ComboBox will not recognize it -->
+                        <TextBox Visibility="Hidden" Template="{StaticResource ComboBoxTextBox}" HorizontalAlignment="Left" Margin="3,3,23,3" x:Name="PART_EditableTextBox" Style="{x:Null}" VerticalAlignment="Center" Focusable="True" Background="Transparent" IsReadOnly="{TemplateBinding IsReadOnly}"/>
+
+                        <Path x:Name="DropDownArrow"
+                              Data="M726.62 470.62L545.94 651.31c-18.72 18.72-49.16 18.72-67.88 0L297.38 470.62c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L512 594.75l169.38-169.38c12.5-12.5 32.75-12.5 45.25 0 6.25 6.25 9.38 14.44 9.38 22.62s-3.13 16.39-9.39 22.63zM523.31 606.38v-0.31 0.31z
+                                    M128 512c0-211.74 172.26-384 384-384s384 172.26 384 384-172.26 384-384 384-384-172.26-384-384m-64 0c0 247.42 200.58 448 448 448s448-200.58 448-448S759.42 64 512 64 64 264.58 64 512z"
+                              Margin="4" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Right"
+                              Width="12" Height="{Binding Width,RelativeSource={RelativeSource Self}}"
+                              Fill="Black" Opacity="0.85" IsHitTestVisible="False">
+                        </Path>
+
+
+
+                        <!-- The Popup shows the list of items in the ComboBox. IsOpen is databound to IsDropDownOpen which is toggled via the ComboBoxToggleButton -->
+                        <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" x:Name="Popup" Focusable="False" AllowsTransparency="True" PopupAnimation="Slide">
+                            <Grid MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{TemplateBinding ActualWidth}" x:Name="DropDown" SnapsToDevicePixels="True">
+                                <Border x:Name="DropDownBorder" 
+                                        Background="{StaticResource WindowBackgroundBrush}"
+                                        BorderBrush="LightGray"
+                                        BorderThickness="1"
+                                        CornerRadius="0"/>
+                                <scrollviewerex:cScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" CanContentScroll="True"
+                                                              ScrollBarColor="Gray">
+
+                                    <!-- The StackPanel is used to display the children by setting IsItemsHost to be True -->
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+
+                                </scrollviewerex:cScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- This forces the DropDown to have a minimum size if it is empty -->
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter Property="MinHeight" Value="95" TargetName="DropDownBorder"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource DisabledForegroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                        </Trigger>
+                        <Trigger Property="AllowsTransparency" SourceName="Popup" Value="true">
+                            <Setter Property="CornerRadius" Value="0" TargetName="DropDownBorder"/>
+                            <Setter Property="Margin" Value="0,2,0,0" TargetName="DropDownBorder"/>
+                        </Trigger>
+                        <Trigger Property="IsEditable" Value="true">
+                            <Setter Property="IsTabStop" Value="false"/>
+                            <Setter Property="Visibility" Value="Visible" TargetName="PART_EditableTextBox"/>
+                            <Setter Property="Visibility" Value="Hidden" TargetName="ContentSite"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Opacity" TargetName="bk" Value="0.85"/>
+                            <Setter Property="Foreground" TargetName="ContentSite" Value="White"/>
+                            <Setter Property="Fill" TargetName="DropDownArrow" Value="White"/>
+                            <Setter Property="Effect" TargetName="DropDownArrow">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="White" ShadowDepth="0" BlurRadius="1" Direction="0"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <!--<Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter Property="Opacity" TargetName="bk" Value="0.8"/>
+                        </Trigger>-->
+
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="ZeroNull"/>
+                                <Condition Binding="{Binding SelectedIndex, RelativeSource={RelativeSource Self}}" Value="0"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Opacity" Value="0.35"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Tag, RelativeSource={RelativeSource Self}}" Value="ZeroNull"/>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Opacity" Value="1.0"/>
+                        </MultiDataTrigger>
+                           
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!--ComboBoxItem改背景色-->
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ComboBoxItem}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                <Grid Margin="0,1,0,1">
+                                    <Border x:Name="ItemBackground" Background="#80000000"
+                                            BorderBrush="#80000000"
+                                            BorderThickness="1" 
+                                            CornerRadius="2.5"
+                                            Opacity="1.0"/>
+                                    <!--OK-->
+                                    <ContentPresenter Margin="2,0,2,0"/>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#80FFFFFF" TargetName="ItemBackground"/>
+                                        <Setter Property="BorderBrush" Value="White" TargetName="ItemBackground"/>
+                                        <Setter Property="Foreground" Value="Black" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Foreground" Value="Red" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <EventSetter Event="PreviewMouseWheel" Handler="ComboBox_PreviewMouseWheel"/>
+    </Style>
+    
+    <!--ListBox-->
+    <Style x:Key="ListBoxStyle" TargetType="{x:Type ListBox}" BasedOn="{StaticResource {x:Type ListBox}}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Visible"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <scrollviewerex:cScrollViewer x:Name="ScrollViewer"
+                                                  BackgroundColor="{StaticResource StripeTexture}"
+                                                  BackgroundCornerRadius="2.5"
+                                                  VerticalScrollBarVisibility="Hidden">
+                        <ItemsPresenter/>
+                    </scrollviewerex:cScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Border>
+                                    <Grid Margin="1,1,1,0">
+                                        <Rectangle Fill="#01FFFFFF"/>
+                                        <Rectangle x:Name="bk" Fill="DarkRed" Opacity="0.5" Visibility="Collapsed"/>
+                                        
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" MinHeight="21">
+                                            <!--名字-->
+                                            <Border Background="#1DA3A3A3" Padding="5,0,0,0" CornerRadius="2.5">
+                                                <TextBlock Text="{Binding DisplayName}" Width="70" VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!--按键1-->
+                                            <ComboBox Margin="2,0,0,0" Width="90" Height="20" VerticalAlignment="Center" 
+                                                      ItemsSource="{Binding BtnMapping.KeyEnumList0}"   
+                                                      SelectedIndex="{Binding BtnMapping.SelectedKey0}" 
+                                                      Style="{StaticResource cJoyconMapperComboBox}"
+                                                      Tag="ZeroNull">
+                                            </ComboBox>
+                                            <!--按键2-->
+                                            <ComboBox Margin="2,0,0,0" Width="90" Height="20" VerticalAlignment="Center" 
+                                                      ItemsSource="{Binding BtnMapping.KeyEnumList1}" 
+                                                      SelectedIndex="{Binding BtnMapping.SelectedKey1}" 
+                                                      Style="{StaticResource cJoyconMapperComboBox}"
+                                                      Tag="ZeroNull"/>
+                                            
+                                            <!--循环-->
+                                            <ComboBox Margin="12,0,0,0" Width="60" Height="20" VerticalAlignment="Center"
+                                                      ItemsSource="{Binding BtnMapping.CycleEnumList}" 
+                                                      SelectedIndex="{Binding BtnMapping.Cycle, Converter={StaticResource cJoyConMapper_converter_bool2selectedidx}}"
+                                                      Style="{StaticResource cJoyconMapperComboBox}"/>
+                                            
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Visibility" TargetName="bk" Value="Visible"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseCaptured" Value="true">
+                                        <Setter Property="Visibility" TargetName="bk" Value="Visible"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                    <!--<EventSetter Event="PreviewMouseLeftButtonDown" Handler="PreviewMouseLeftButtonDown"/>
+                    <EventSetter Event="PreviewMouseLeftButtonUp" Handler="PreviewMouseLeftButtonUp"/>
+                    <EventSetter Event="PreviewMouseMove" Handler="PreviewMouseMove"/>
+                    -->
+                    <EventSetter Event="MouseLeave" Handler="ListBoxItem_MouseLeave"/>
+                    <EventSetter Event="MouseEnter" Handler="ListBoxItem_MouseEnter"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <!--<EventSetter Event="MouseLeftButtonUp" Handler="ListBox_MouseLeftButtonUp"/>
+        <EventSetter Event="ScrollViewer.ScrollChanged" Handler="ListBox_OnScrollChanged"/>-->
+    </Style>
+    
+    
+    
+    
+    
+    
+    <!--容器样式-->
+    <Style TargetType="{x:Type local:cJoyConMapper}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:cJoyConMapper}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            
+                            <!--手柄图-->
+                            <Border Grid.Column="0" Grid.Row="1"
+                                    HorizontalAlignment="Left" VerticalAlignment="Top"
+                                    Width="156" Height="283">
+                                <Border.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="{Binding GamePadImage}"/>
+                                </Border.Background>
+
+                                <Ellipse HorizontalAlignment="Left" VerticalAlignment="Top"
+                                         Fill="White" Stroke="OrangeRed" StrokeThickness="1"
+                                         Width="15" Height="15" 
+                                         Margin="{Binding CurrentBtnPos,Converter={StaticResource cJoyConMapper_converter_nullablemargin2margin}}"
+                                         Visibility="{Binding CurrentBtnPos,Converter={StaticResource cJoyConMapper_converter_nullablemargin2visibility}}">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect Direction="0" BlurRadius="3" ShadowDepth="0"/>
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Border>
+
+                            <!--映射列表-->
+                            <StackPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Margin="15,0,0,0"
+                                        Orientation="Vertical">
+                                <Grid Margin="0,0,0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="2"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="2"/>
+                                        <ColumnDefinition Width="90"/>
+                                        <ColumnDefinition Width="12"/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="3" Foreground="White" HorizontalAlignment="Center" 
+                                               FontStyle="Italic" FontWeight="Bold" Text="Key1"/>
+                                    <TextBlock Grid.Column="5" Foreground="White" HorizontalAlignment="Center" 
+                                               FontStyle="Italic" FontWeight="Bold" Text="Key2"/>
+                                    <TextBlock Grid.Column="7" Foreground="White" HorizontalAlignment="Center" 
+                                               FontStyle="Italic" FontWeight="Bold" Text="Cycle"/>
+                                </Grid>
+                                <Border BorderBrush="DarkGray" BorderThickness="1" Padding="1">
+                                    <ListBox DataContext="{TemplateBinding DataContext}"
+                                             ItemsSource="{Binding KeyboardMappingInfoList}"
+                                             Style="{StaticResource ListBoxStyle}"/>
+                                </Border>
+                            </StackPanel>
+
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>

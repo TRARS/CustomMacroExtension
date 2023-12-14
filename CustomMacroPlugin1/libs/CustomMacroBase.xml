@@ -236,7 +236,7 @@
         <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.SendKeyBoardClick(System.Windows.Forms.Keys)">
             <summary>
             <para>键盘某键按下&amp;弹起</para>
-            <para>参数 key：类似 (short)WinForm.Keys.A 这样</para>
+            <para>参数 key：按哪个键（比如填'<see cref="F:System.Windows.Forms.Keys.Enter"/>'）</para>
             </summary>
         </member>
         <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.SendBlockInput(System.Boolean)">
@@ -255,6 +255,7 @@
         <member name="M:CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.MouseDown(System.String,System.Boolean,CustomMacroBase.Helper.Tools.SendInputManager.SendKBMInput.MouseKeys[])">
             <summary>
             <para>鼠标某键按下</para>
+            <para>参数 specialKey：用作访问字典的唯一key</para>
             <para>参数 flag：true按下 false弹起</para>
             <para>参数 keys：一次性按多个键，MouseKey数组</para>
             <para>禁用自动连发</para>

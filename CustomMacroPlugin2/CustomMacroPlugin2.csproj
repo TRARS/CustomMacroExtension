@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Platforms>x64</Platforms>
+    <BaseOutputPath>$(SolutionDir)\bin</BaseOutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Configurations>Release</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="MacroSample\Game_JoyConMapper\Packet\Resources\Joycon%28L%29.png" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="CustomMacroBase">
+      <HintPath>..\libs\CustomMacroBase.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Resource Include="MacroSample\Game_JoyConMapper\Packet\Resources\Joycon(L).png" />
+  </ItemGroup>
+  
+</Project>
