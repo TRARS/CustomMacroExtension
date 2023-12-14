@@ -128,5 +128,13 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
                 lastExtentHeight = currentExtentHeight;
             }
         }
+
+        private void ComboBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (((ComboBox)sender).IsDropDownOpen is false)
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

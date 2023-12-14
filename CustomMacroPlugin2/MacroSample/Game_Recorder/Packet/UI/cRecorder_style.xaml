@@ -300,6 +300,8 @@
                 </Style>
             </Setter.Value>
         </Setter>
+
+        <EventSetter Event="PreviewMouseWheel" Handler="ComboBox_PreviewMouseWheel"/>
     </Style>
 
 
