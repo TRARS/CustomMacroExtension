@@ -12,10 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="MacroSample\Game_JoyConMapper\Packet\Resources\Joycon%28L%29.png" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <Reference Include="CustomMacroBase">
       <HintPath>..\libs\CustomMacroBase.dll</HintPath>
       <Private>False</Private>

@@ -395,7 +395,7 @@ namespace CustomMacroPlugin1.MacroSample
 <br>
 
 ## Additional Considerations
-※ <strong>HidHide Usage:</strong> Ensure to employ [`HidHide`](https://github.com/ViGEm/HidHide/releases) for concealing the actual controller, enhancing privacy and security.<br>
+※ <strong>HidHide Usage:</strong> Ensure to employ [`HidHide`](https://github.com/ViGEm/HidHide/releases) to Hide the real controller<br>
 ※ <strong>Macro Functionality Verification:</strong> It is recommended to test the macros on [`gamepad-tester.com`](https://gamepad-tester.com/) to confirm their proper functioning.<br>
 
 
