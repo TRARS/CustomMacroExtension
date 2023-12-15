@@ -251,8 +251,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
             };
 
 
-            CycleEnumList = Enum.GetValues(typeof(AutoCycle))
-                                .Cast<AutoCycle>()
+            CycleEnumList = Enum.GetNames(typeof(AutoCycle))
                                 .Select(e => e.ToString())
                                 .ToList();
 

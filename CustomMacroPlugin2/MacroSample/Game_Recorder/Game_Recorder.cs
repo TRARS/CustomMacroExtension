@@ -46,11 +46,11 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
         {
             MainGate.Text = "Recorder";
 
-            MainGate.Add(CreateGateBase("AllowRecording"));//[0]
-            MainGate.Add(CreateGateBase("AllowPlayback (Touch to start, Release to stop)"));//[1]
-            MainGate[1].Add(CreateGateBase("AutoRepeat"));//[1][0]
+            MainGate.Add(CreateGateBase("allow recording (Only if playback is not currently running)"));//[0]
+            MainGate.Add(CreateGateBase("allow playback (Touch to start, Release to stop)"));//[1]
+            MainGate[1].Add(CreateGateBase("auto repeat"));//[1][0]
 
-            MainGate.Add(CreateGateBase("Send to ProCon Simulator", false, hideself: debug_flag["SendToProCon"]));//[2]
+            MainGate.Add(CreateGateBase("send to procon emulator", false, hideself: debug_flag["SendToProCon"]));//[2]
             MainGate.AddEx(() => CreateSlider(0, 1000, model, nameof(model.DefDurationValue), 1, sliderTextPrefix: "DefaultDuration: ", defalutValue: 500, sliderTextSuffix: "ms", hideself: debug_flag["DefDuration slider"]));
             MainGate.AddEx(() => { return new cRecorder() { Width = 320, Height = 240, Margin = new Thickness(0, 4, 0, 4) }; });
 
@@ -94,13 +94,18 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
         bool runByBtn = false;
         bool tryLoop => MainGate[1][0].Enable;
 
+        bool playback_is_running => RM.MacroTaskIsRunning;
+
         bool start_flag => RealDS4.Touch0IsActive || tryStart;
         bool stop_flag => runByBtn ? tryStop : !RealDS4.Touch0IsActive;
         bool repeat_flag => tryLoop;
 
         private void Macro_Record()
         {
-            RM.Record(RealDS4, VirtualDS4, () => (int)model.DefDurationValue);
+            if(playback_is_running is false)
+            {
+                RM.Record(RealDS4, VirtualDS4, () => (int)model.DefDurationValue);
+            }
         }
 
         private void Macro_Playback()

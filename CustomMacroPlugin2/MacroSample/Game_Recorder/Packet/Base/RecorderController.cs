@@ -242,6 +242,11 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base
         /// 该值为true时令脚本可以循环
         /// </summary>
         public bool Repeat_Condition { get => macro_repeat_condition; set => macro_repeat_condition = value; }
+
+        /// <summary>
+        /// 该值为true时意为正在播放宏
+        /// </summary>
+        public bool MacroTaskIsRunning => macro_task_is_running;
     }
 
     //播放
