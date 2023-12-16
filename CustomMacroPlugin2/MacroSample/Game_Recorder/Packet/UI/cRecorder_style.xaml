@@ -31,8 +31,11 @@
         </VisualBrush.Visual>
     </VisualBrush>
 
+    <!--MouseOverColor-->
+    <SolidColorBrush x:Key="MouseOverColor" Color="DarkCyan"/>
+
     <!--ListBoxItem_TextBox-->
-    <Style  x:Key="cRecorderTextBox"  TargetType="{x:Type TextBox}">
+    <Style x:Key="cRecorderTextBox"  TargetType="{x:Type TextBox}">
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="CaretBrush" Value="OrangeRed"/>
         <Setter Property="SelectionBrush" Value="Black"/>
@@ -50,7 +53,7 @@
                     <Border x:Name="border" SnapsToDevicePixels="True">
                         <Grid>
                             <Rectangle             Grid.Column="0" Grid.ColumnSpan="2" Fill="White" Opacity="1" RadiusX="2" RadiusY="2" />
-                            <Rectangle x:Name="bk" Grid.Column="0" Grid.ColumnSpan="2" Fill="DarkCyan" Opacity="0" RadiusX="2" RadiusY="2" />
+                            <Rectangle x:Name="bk" Grid.Column="0" Grid.ColumnSpan="2" Fill="{StaticResource MouseOverColor}" Opacity="0" RadiusX="2" RadiusY="2" />
                             <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"
                                           VerticalAlignment="Center" Margin="4,0,0,0">
                                 <!--<ScrollViewer.Effect>
@@ -169,7 +172,7 @@
                     <Grid>
                         <!--背景色-->
                         <Rectangle             Grid.Column="0" Grid.ColumnSpan="2" Fill="White" Opacity="1" RadiusX="2" RadiusY="2" />
-                        <Rectangle x:Name="bk" Grid.Column="0" Grid.ColumnSpan="2" Fill="DarkCyan" Opacity="0" RadiusX="2" RadiusY="2" />
+                        <Rectangle x:Name="bk" Grid.Column="0" Grid.ColumnSpan="2" Fill="{StaticResource MouseOverColor}" Opacity="0" RadiusX="2" RadiusY="2" />
 
                         <!-- The ToggleButton is databound to the ComboBox itself to toggle IsDropDownOpen -->
                         <ToggleButton  Opacity="0.01" Grid.Column="2" Template="{StaticResource ToggleButtonControlTemplate1}" x:Name="ToggleButton" Focusable="false" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press"/>
@@ -190,9 +193,6 @@
                               Margin="4" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Right"
                               Width="12" Height="{Binding Width,RelativeSource={RelativeSource Self}}"
                               Fill="Black" Opacity="0.85" IsHitTestVisible="False">
-                            <!--<Path.Effect>
-                                <DropShadowEffect BlurRadius="0" Color="Red" ShadowDepth="1" />
-                            </Path.Effect>-->
                         </Path>
 
 
@@ -335,8 +335,9 @@
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                 <Border>
                                     <Grid Margin="1,1,1,0">
-                                        <Rectangle Fill="#01FFFFFF"/>
-                                        <Rectangle x:Name="rect" Fill="DarkSlateGray" Opacity="1" Visibility="Hidden"/>
+                                        <Rectangle Fill="Transparent"/>
+                                        <Border x:Name="bk" Background="{StaticResource MouseOverColor}" CornerRadius="2.5" Opacity="0.5" Visibility="Collapsed"/>
+
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" MinHeight="21">
                                             <!--拖拽-->
                                             <Path Opacity="0.2"
@@ -385,10 +386,10 @@
 
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Visibility" TargetName="rect" Value="Visible"/>
+                                        <Setter Property="Visibility" TargetName="bk" Value="Visible"/>
                                     </Trigger>
                                     <Trigger Property="IsMouseCaptured" Value="true">
-                                        <Setter Property="Visibility" TargetName="rect" Value="Visible"/>
+                                        <Setter Property="Visibility" TargetName="bk" Value="Visible"/>
                                     </Trigger>
 
                                     <EventTrigger RoutedEvent="MouseEnter">
@@ -504,7 +505,7 @@
                                            Text="{Binding Title}"/>
                             </Grid>
 
-                            <Border Grid.Row="1" BorderBrush="DarkGray" BorderThickness="1" Padding="1">
+                            <Border Grid.Row="1" BorderBrush="DarkGray" BorderThickness="1" Padding="1" CornerRadius="2.5">
                                 <ListBox DataContext="{TemplateBinding DataContext}"
                                          ItemsSource="{Binding ItemsSource}"
                                          Style="{StaticResource ListBoxStyle}"/>

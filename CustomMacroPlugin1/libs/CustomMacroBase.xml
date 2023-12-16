@@ -19,6 +19,26 @@
             DataContext中转
             </summary>
         </member>
+        <member name="T:CustomMacroBase.CustomEffect.MagnifyEffect">
+            <summary>An effect that magnifies a circular region.</summary>
+        </member>
+        <member name="P:CustomMacroBase.CustomEffect.MagnifyEffect.CenterPoint">
+            <summary>The center point of the magnified region.</summary>
+        </member>
+        <member name="P:CustomMacroBase.CustomEffect.MagnifyEffect.Radius">
+            <summary>The radius of the magnified region.</summary>
+        </member>
+        <member name="P:CustomMacroBase.CustomEffect.MagnifyEffect.MagnificationAmount">
+            <summary>The magnification factor.</summary>
+        </member>
+        <member name="P:CustomMacroBase.CustomEffect.MagnifyEffect.AspectRatio">
+            <summary>The aspect ratio (width / height) of the input.</summary>
+        </member>
+        <member name="M:CustomMacroBase.CustomEffect.TranslationalEffect.#ctor">
+            <summary>
+            线性减淡+平移
+            </summary>
+        </member>
         <member name="T:CustomMacroBase.Helper.Attributes.DoNotLoadAttribute">
             <summary>
             是否加载

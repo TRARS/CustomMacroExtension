@@ -118,7 +118,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
                 { "West",  new (()=> Joycon.West,          new[] { KeyboardKeys.Z }, AutoCycle.On ) },
                 { "East",  new (()=> Joycon.East,          new[] { KeyboardKeys.Y }, AutoCycle.On ) },
                 { "DpadUp",    new (()=> Joycon.DpadUp,    new[] { KeyboardKeys.F6 }, AutoCycle.On ) },
-                { "DpadDown",  new (()=> Joycon.DpadDown,  new[] { KeyboardKeys.Space }, AutoCycle.On ) },
+                { "DpadDown",  new (()=> Joycon.DpadDown,  new[] { KeyboardKeys.Space }, null ) },
                 { "DpadLeft",  new (()=> Joycon.DpadLeft,  new[] { KeyboardKeys.Q }, AutoCycle.On ) },
                 { "DpadRight", new (()=> Joycon.DpadRight, new[] { KeyboardKeys.R }, AutoCycle.On ) },
                 { "L",  new (()=> Joycon.L,                new[] { KeyboardKeys.C }, AutoCycle.On ) },

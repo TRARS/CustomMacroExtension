@@ -21,7 +21,9 @@
             </Grid>
         </VisualBrush.Visual>
     </VisualBrush>
-
+    
+    <!--MouseOverColor-->
+    <SolidColorBrush x:Key="MouseOverColor" Color="DarkMagenta"/>
 
     <!--ListBoxItem_ComboBoxTextBox-->
     <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#454851"/>
@@ -106,7 +108,7 @@
                     <Grid>
                         <!--背景色-->
                         <Rectangle             Grid.Column="0" Grid.ColumnSpan="2" Fill="White" Opacity="1" RadiusX="2" RadiusY="2" />
-                        <Rectangle x:Name="bk" Grid.Column="0" Grid.ColumnSpan="2" Fill="DarkRed" Opacity="0" RadiusX="2" RadiusY="2" />
+                        <Rectangle x:Name="bk" Grid.Column="0" Grid.ColumnSpan="2" Fill="{StaticResource MouseOverColor}" Opacity="0" RadiusX="2" RadiusY="2" />
 
                         <!-- The ToggleButton is databound to the ComboBox itself to toggle IsDropDownOpen -->
                         <ToggleButton  Opacity="0.01" Grid.Column="2" Template="{StaticResource ToggleButtonControlTemplate1}" x:Name="ToggleButton" Focusable="false" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press"/>
@@ -252,7 +254,8 @@
                     <scrollviewerex:cScrollViewer x:Name="ScrollViewer"
                                                   BackgroundColor="{StaticResource StripeTexture}"
                                                   BackgroundCornerRadius="2.5"
-                                                  VerticalScrollBarVisibility="Hidden">
+                                                  VerticalScrollBarVisibility="Hidden"
+                                                  Margin="0,0,0,1">
                         <ItemsPresenter/>
                     </scrollviewerex:cScrollViewer>
                 </ControlTemplate>
@@ -267,8 +270,8 @@
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                 <Border>
                                     <Grid Margin="1,1,1,0">
-                                        <Rectangle Fill="#01FFFFFF"/>
-                                        <Rectangle x:Name="bk" Fill="DarkRed" Opacity="0.5" Visibility="Collapsed"/>
+                                        <Rectangle Fill="Transparent"/>
+                                        <Border x:Name="bk" Background="{StaticResource MouseOverColor}" CornerRadius="2.5" Opacity="0.5" Visibility="Collapsed"/>
                                         
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" MinHeight="21">
                                             <!--名字-->
@@ -390,7 +393,7 @@
                                     <TextBlock Grid.Column="7" Foreground="White" HorizontalAlignment="Center" 
                                                FontStyle="Italic" FontWeight="Bold" Text="Cycle"/>
                                 </Grid>
-                                <Border BorderBrush="DarkGray" BorderThickness="1" Padding="1">
+                                <Border BorderBrush="DarkGray" BorderThickness="1" Padding="1" CornerRadius="2.5">
                                     <ListBox DataContext="{TemplateBinding DataContext}"
                                              ItemsSource="{Binding KeyboardMappingInfoList}"
                                              Style="{StaticResource ListBoxStyle}"/>
