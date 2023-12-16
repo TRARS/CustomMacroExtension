@@ -1,5 +1,5 @@
 # CustomMacroExtension
-* This is a macro plugin project only work on the [`custom build of DS4Windows(3.2.20)`](https://github.com/TRARS/DS4Windows)  
+* This is a macro plugin project only work on the [`custom build of DS4Windows(3.3.0)`](https://github.com/TRARS/DS4Windows)  
 
 ## How to use
 To employ the macro plugin, follow these steps:
@@ -396,7 +396,7 @@ namespace CustomMacroPlugin1.MacroSample
 
 ## Additional Considerations
 ※ <strong>Utilize HidHide:</strong> It is essential to use [`HidHide`](https://github.com/ViGEm/HidHide/releases) in order to hide the real controller.<br>
-※ <strong>Macro Functionality Verification:</strong> It is recommended to test the macros on [`gamepad-tester.com`](https://gamepad-tester.com/) to confirm their proper functioning.<br>
+※ <strong>Verify Macro Functionality:</strong> It is recommended to test the macros on [`gamepad-tester.com`](https://gamepad-tester.com/) to confirm their proper functioning.<br>
 
 
 ## Preview
