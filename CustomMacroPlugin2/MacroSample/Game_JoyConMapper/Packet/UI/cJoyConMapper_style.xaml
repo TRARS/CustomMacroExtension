@@ -8,16 +8,17 @@
     <local:cJoyConMapper_converter_nullablemargin2margin x:Key="cJoyConMapper_converter_nullablemargin2margin"/>
     <local:cJoyConMapper_converter_nullablemargin2visibility x:Key="cJoyConMapper_converter_nullablemargin2visibility"/>
     <local:cJoyConMapper_converter_bool2selectedidx x:Key="cJoyConMapper_converter_bool2selectedidx"/>
-
+    <local:cJoyConMapper_converter_imgnullcheck x:Key="cJoyConMapper_converter_imgnullcheck"/>
+    
     <!--StripeTexture-->
     <VisualBrush x:Key="StripeTexture" TileMode="Tile" Viewport="0,0,3,3" ViewportUnits="Absolute" Viewbox="0,0,15,15" ViewboxUnits="Absolute">
         <VisualBrush.Visual>
             <Grid Background="Transparent" RenderTransformOrigin="0.5,0.5" Opacity="0.1">
                 <Path Data="M 0,15 L 15,0" Stroke="White" StrokeThickness="5" Opacity="0.4" />
-                <Path Data="M 15,15 L 30,0" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
-                <Path Data="M 15,-15 L 0,0" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
-                <Path Data="M 0,30 L 15,15" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
-                <Path Data="M 0,0 L -15,15" Stroke="White"  StrokeThickness="5" Opacity="0.4" />
+                <Path Data="M 15,15 L 30,0" Stroke="White" StrokeThickness="5" Opacity="0.4" />
+                <Path Data="M 15,-15 L 0,0" Stroke="White" StrokeThickness="5" Opacity="0.4" />
+                <Path Data="M 0,30 L 15,15" Stroke="White" StrokeThickness="5" Opacity="0.4" />
+                <Path Data="M 0,0 L -15,15" Stroke="White" StrokeThickness="5" Opacity="0.4" />
             </Grid>
         </VisualBrush.Visual>
     </VisualBrush>
@@ -276,7 +277,16 @@
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" MinHeight="21">
                                             <!--名字-->
                                             <Border Background="#1DA3A3A3" Padding="5,0,0,0" CornerRadius="2.5">
-                                                <TextBlock Text="{Binding DisplayName}" Width="70" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="displayText" Text="{Binding DisplayName}" Width="70" VerticalAlignment="Center">
+                                                    <TextBlock.RenderTransform>
+                                                        <TransformGroup>
+                                                            <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                                        </TransformGroup>
+                                                    </TextBlock.RenderTransform>
+                                                    <TextBlock.RenderTransformOrigin>
+                                                        <Point X="0" Y="0.5"/>
+                                                    </TextBlock.RenderTransformOrigin>
+                                                </TextBlock>
                                             </Border>
 
                                             <!--按键1-->
@@ -298,7 +308,6 @@
                                                       ItemsSource="{Binding BtnMapping.CycleEnumList}" 
                                                       SelectedIndex="{Binding BtnMapping.Cycle, Converter={StaticResource cJoyConMapper_converter_bool2selectedidx}}"
                                                       Style="{StaticResource cJoyconMapperComboBox}"/>
-                                            
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -306,6 +315,35 @@
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter Property="Visibility" TargetName="bk" Value="Visible"/>
+
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard FillBehavior="HoldEnd">
+                                                    <DoubleAnimation Storyboard.TargetName="displayText"
+                                                         Storyboard.TargetProperty="(TextBlock.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
+                                                         To="1.1" 
+                                                         Duration="0:0:0.1" />
+                                                    <DoubleAnimation Storyboard.TargetName="displayText"
+                                                         Storyboard.TargetProperty="(TextBlock.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
+                                                         To="1.1" 
+                                                         Duration="0:0:0.1" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard FillBehavior="HoldEnd">
+                                                    <DoubleAnimation Storyboard.TargetName="displayText"
+                                                                     Storyboard.TargetProperty="(TextBlock.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)"
+                                                                     To="1" 
+                                                                     Duration="0:0:0.1" />
+                                                    <DoubleAnimation Storyboard.TargetName="displayText"
+                                                                     Storyboard.TargetProperty="(TextBlock.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)"
+                                                                     To="1" 
+                                                                     Duration="0:0:0.1" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
                                     </Trigger>
                                     <Trigger Property="IsMouseCaptured" Value="true">
                                         <Setter Property="Visibility" TargetName="bk" Value="Visible"/>
@@ -357,7 +395,7 @@
                                     HorizontalAlignment="Left" VerticalAlignment="Top"
                                     Width="156" Height="283">
                                 <Border.Background>
-                                    <ImageBrush Stretch="Uniform" ImageSource="{Binding GamePadImage}"/>
+                                    <ImageBrush Stretch="Uniform" ImageSource="{Binding GamePadImage, Converter={StaticResource cJoyConMapper_converter_imgnullcheck}, Mode=OneWay}"/>
                                 </Border.Background>
 
                                 <Ellipse HorizontalAlignment="Left" VerticalAlignment="Top"

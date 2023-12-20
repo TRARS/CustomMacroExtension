@@ -35,6 +35,8 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             {
                 move_source = (ListBoxItem)s;
                 move_source.Opacity = 0.5;
+
+                Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.ItemHitTest, false);
             }
         }
         private void PreviewMouseLeftButtonUp(object s, MouseButtonEventArgs e)
@@ -48,11 +50,13 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             {
                 try
                 {
-                    var pre_move_target = (Minunit)((ListBoxItem)s).DataContext;
-                    var parent = ((Minunit)move_source.DataContext).Parent;
-                    var source = (Minunit)move_source.DataContext;
-                    var target = pre_move_target;
-                    (s as ListBoxItem)?.AddAdorner(isMoveUp(parent, source, target));
+                    if(((ListBoxItem)s).DataContext is Minunit pre_move_target)
+                    {
+                        var parent = ((Minunit)move_source.DataContext).Parent;
+                        var source = (Minunit)move_source.DataContext;
+                        var target = pre_move_target;
+                        (s as ListBoxItem)?.AddAdorner(isMoveUp(parent, source, target));
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -112,6 +116,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             {
                 move_source = move_target = null;
                 isDrag = false;
+                Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.ItemHitTest, true);
             }
         }
         private void ListBox_OnScrollChanged(object s, ScrollChangedEventArgs e)

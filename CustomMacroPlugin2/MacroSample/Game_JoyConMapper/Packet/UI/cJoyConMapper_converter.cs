@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
 {
@@ -63,6 +64,24 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
                 1 => false,
                 _ => false
             };
+        }
+    }
+
+    public class cJoyConMapper_converter_imgnullcheck : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ImageSource imgsource && imgsource != null)
+            {
+                return imgsource;
+            }
+
+            return new SolidColorBrush(Colors.Transparent);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

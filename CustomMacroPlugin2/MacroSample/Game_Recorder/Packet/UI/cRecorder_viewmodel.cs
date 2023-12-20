@@ -64,6 +64,12 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             get { return model.DeleteAction; }
             set { model.DeleteAction = value; NotifyPropertyChanged(); }
         }
+
+        public bool ItemHitTest
+        {
+            get { return model.ItemHitTest; }
+            set { model.ItemHitTest = value; NotifyPropertyChanged(); }
+        }
     }
 
     public partial class cRecorder_viewmodel
@@ -111,6 +117,12 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
 
             dynamic? currentItemModel = null;
             Mediator.Instance.Register(RecorderMessageType.Instance.GetCurrentRecorderMouseEnterItemModel, (para) => { currentItemModel = para; });
+
+            Mediator.Instance.Register(RecorderMessageType.Instance.ItemHitTest, (para) => 
+            {
+                ItemHitTest = ((bool)para);
+                //Mediator.Instance.NotifyColleagues(MessageType.PrintNewMessage, $"ItemHitTest = {ItemHitTest}");
+            });
 
             //Init_DeleteAction
             this.DeleteAction = () =>

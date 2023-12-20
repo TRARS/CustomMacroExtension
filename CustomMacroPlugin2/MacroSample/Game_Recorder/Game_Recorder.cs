@@ -44,6 +44,8 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
 
         public override void Init()
         {
+            this.UseColorfulText = true;
+
             MainGate.Text = "Recorder";
 
             MainGate.Add(CreateGateBase("allow recording (Only if playback is not currently running)"));//[0]

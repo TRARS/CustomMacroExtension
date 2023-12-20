@@ -102,6 +102,8 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
 
         public override void Init()
         {
+            this.UseColorfulText = true;
+
             MainGate.Text = Title = "JoyCon(L)";
 
             MainGate.Add(CreateGateBase("enable mapping left-stick to buttons"));//[0]

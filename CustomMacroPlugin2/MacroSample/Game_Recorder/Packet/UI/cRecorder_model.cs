@@ -70,5 +70,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
         public ICommand? StopBtnCommand { get; set; } = null;
 
         public Action? DeleteAction { get; set; } = null;
+
+        public bool ItemHitTest { get; set; } = false;
     }
 }

@@ -18,6 +18,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base
         public string StartRecordedAction { get; init; }
         public string StopRecordedAction { get; init; }
         public string GetCurrentRecorderMouseEnterItemModel { get; init; }
+        public string ItemHitTest { get; init; }
 
         private RecorderMessageType()
         {
@@ -26,6 +27,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base
             StartRecordedAction = nameof(StartRecordedAction) + GenerateRandomString(16);
             StopRecordedAction = nameof(StopRecordedAction) + GenerateRandomString(16);
             GetCurrentRecorderMouseEnterItemModel = nameof(GetCurrentRecorderMouseEnterItemModel) + GenerateRandomString(16);
+            ItemHitTest = nameof(ItemHitTest) + GenerateRandomString(16);
         }
 
         private Random random = new Random();

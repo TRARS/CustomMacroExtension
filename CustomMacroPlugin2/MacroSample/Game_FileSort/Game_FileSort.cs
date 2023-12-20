@@ -36,6 +36,8 @@ namespace CustomMacroPlugin2.MacroSample.Game_FileSort
     {
         public override void Init()
         {
+            this.UseColorfulText = true;
+
             MainGate.Text = "FileSort";
 
             MainGate.AddEx(() =>
