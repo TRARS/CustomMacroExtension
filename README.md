@@ -1,18 +1,18 @@
 # CustomMacroExtension
-* This is a macro plugin project only work on the [`custom build of DS4Windows(3.3.0)`](https://github.com/TRARS/DS4Windows)  
+* This is a macro plugin project only work on the [`custom build of DS4Windows(3.3.3)`](https://github.com/TRARS/DS4Windows)  
 
 ## How to use
 To employ the macro plugin, follow these steps:
 * Position the generated DLL in the identical directory as the DS4Windows.exe.
 * Confirm that the DLL prefix contains 'CustomMacroPlugin' (e.g.,  'XXXCustomMacroPluginYYYZZZ.dll').
 
-## Constraints in Macro Class Creation
+## Constraints in macro class creation
 When crafting macro classes, please observe the following limitations:
 * Confirm that the class inherits from the MacroBase class.
 * Confirm that the class name includes 'Game_' (e.g.,  'XXXGame_YYYZZZ').
 * Confirm that the namespace of the class contains 'CustomMacroPlugin' (e.g., 'XXX.CustomMacroPluginYYY.ZZZ').   
 
-## Explore the Code Examples Below to Master Macro Writing Techniques
+## Explore the code examples below to master macro writing techniques
 <details><summary>Game_Sample0.cs(Blank Template)</summary>
 
 ```csharp
