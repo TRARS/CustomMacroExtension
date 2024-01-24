@@ -3,6 +3,7 @@ using CustomMacroBase.Helper.Extensions;
 using CustomMacroBase.Helper.Tools.SendInputManager;
 using CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI;
 using System;
+using System.Windows;
 
 namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
 {
@@ -39,12 +40,15 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
         {
             vStateLite = v;
 
-            cJoyConMapper_viewmodel.Instance.KeyboardMappingInfoList.ForEach(x =>
+            Application.Current.Dispatcher.BeginInvoke(() =>
             {
-                var condition = x.BtnMapping.Condition.Invoke();
-                var keys = x.BtnMapping.GetKeys;
-                var cycle = x.BtnMapping.Cycle;
-                SendKBMInput.KeyDownEx(x.DisplayName, condition, keys, cycle, (int)cycleActivationDuration, (int)cycleDuration);
+                cJoyConMapper_viewmodel.Instance.KeyboardMappingInfoList.ForEach(x =>
+                {
+                    var condition = x.BtnMapping.Condition.Invoke();
+                    var keys = x.BtnMapping.GetKeys;
+                    var cycle = x.BtnMapping.Cycle;
+                    SendKBMInput.KeyDownEx(x.DisplayName, condition, keys, cycle, (int)cycleActivationDuration, (int)cycleDuration);
+                });
             });
         }
     }

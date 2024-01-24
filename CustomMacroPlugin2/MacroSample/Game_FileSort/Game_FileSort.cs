@@ -42,12 +42,12 @@ namespace CustomMacroPlugin2.MacroSample.Game_FileSort
 
             MainGate.AddEx(() =>
             {
-                var border = new Border() 
-                { 
+                var border = new Border()
+                {
                     BorderThickness = new(1),
                     BorderBrush = new SolidColorBrush(Colors.Gray),
                     CornerRadius = new(2.5),
-                    Margin = new(0,4,0,0)
+                    Margin = new(0, 4, 0, 0)
                 };
                 {
                     var stackpanel = new StackPanel() { Orientation = Orientation.Vertical };

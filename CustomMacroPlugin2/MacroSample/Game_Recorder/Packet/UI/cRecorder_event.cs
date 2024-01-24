@@ -50,7 +50,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             {
                 try
                 {
-                    if(((ListBoxItem)s).DataContext is Minunit pre_move_target)
+                    if (((ListBoxItem)s).DataContext is Minunit pre_move_target)
                     {
                         var parent = ((Minunit)move_source.DataContext).Parent;
                         var source = (Minunit)move_source.DataContext;

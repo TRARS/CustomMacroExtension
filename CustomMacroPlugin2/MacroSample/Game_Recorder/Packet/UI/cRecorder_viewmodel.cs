@@ -118,7 +118,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             dynamic? currentItemModel = null;
             Mediator.Instance.Register(RecorderMessageType.Instance.GetCurrentRecorderMouseEnterItemModel, (para) => { currentItemModel = para; });
 
-            Mediator.Instance.Register(RecorderMessageType.Instance.ItemHitTest, (para) => 
+            Mediator.Instance.Register(RecorderMessageType.Instance.ItemHitTest, (para) =>
             {
                 ItemHitTest = ((bool)para);
                 //Mediator.Instance.NotifyColleagues(MessageType.PrintNewMessage, $"ItemHitTest = {ItemHitTest}");

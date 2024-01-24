@@ -104,7 +104,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
 
         private void Macro_Record()
         {
-            if(playback_is_running is false)
+            if (playback_is_running is false)
             {
                 RM.Record(RealDS4, VirtualDS4, () => (int)model.DefDurationValue);
             }
