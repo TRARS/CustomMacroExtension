@@ -109,7 +109,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
             MainGate.Add(CreateGateBase("enable mapping left-stick to buttons"));//[0]
             MainGate[0].Add(CreateGateBase("8-direction-movement", hideself: debug_flag["LeftStick 8-direction-movement"]));//[0][0]
             MainGate[0].AddEx(() => CreateSlider(0, 127, model, nameof(model.LeftStickDeadZone), 1, sliderTextPrefix: $"DeadZone:", defalutValue: 30, hideself: debug_flag["LeftStick 8-direction-movement slider"]));
-            MainGate[0].AddEx(() => CreateSlider(128, 640, model, nameof(model.LeftStickEnlargementFactor), 1, sliderTextPrefix: $"EnlargementFactor:", defalutValue: 640, hideself: debug_flag["LeftStick 8-direction-movement slider"]));
+            MainGate[0].AddEx(() => CreateSlider(128, 1280, model, nameof(model.LeftStickEnlargementFactor), 1, sliderTextPrefix: $"EnlargementFactor:", defalutValue: 1280, hideself: debug_flag["LeftStick 8-direction-movement slider"]));
             MainGate[0].AddEx(() => CreateSlider(64, 180, model, nameof(model.LeftStickClipRadius), 1, sliderTextPrefix: $"ClipRadius:", defalutValue: 128, hideself: debug_flag["LeftStick 8-direction-movement slider"]));
 
             MainGate.Add(CreateGateBase("enable mapping"));//[1]
@@ -139,7 +139,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
     //摇杆修正
     partial class Game_JoyConMapper
     {
-        StickController SM = new(new(64, 640), new(64, 160));
+        StickController SM = new(new(64, 1280), new(64, 1280));
 
         private void LeftStickFix()
         {

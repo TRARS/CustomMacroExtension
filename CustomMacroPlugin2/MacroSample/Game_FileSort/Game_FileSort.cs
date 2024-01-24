@@ -45,7 +45,8 @@ namespace CustomMacroPlugin2.MacroSample.Game_FileSort
                 var border = new Border() 
                 { 
                     BorderThickness = new(1),
-                    BorderBrush = new SolidColorBrush(Colors.Black),
+                    BorderBrush = new SolidColorBrush(Colors.Gray),
+                    CornerRadius = new(2.5),
                     Margin = new(0,4,0,0)
                 };
                 {
@@ -55,7 +56,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_FileSort
                         {
                             MinWidth = 320,
                             Height = 240,
-                            Background = new SolidColorBrush(Colors.White),
+                            Background = new SolidColorBrush(Colors.Transparent),
                             BorderBrush = new SolidColorBrush(Colors.Transparent),
                             AllowDrop = true
                         };

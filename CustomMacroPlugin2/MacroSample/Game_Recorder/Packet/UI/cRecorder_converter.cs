@@ -7,7 +7,7 @@ using System.Windows.Shapes;
 
 namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
 {
-    public class cRecorder_converter_listcheck : IValueConverter
+    class cRecorder_converter_listcheck : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -27,6 +27,23 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             }
 
             return new List<UIElement>();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    class cRecorder_converter_enum2string : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Enum)
+            {
+                return value.ToString() ?? "error"; // 将枚举值转换为字符串
+            }
+            return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

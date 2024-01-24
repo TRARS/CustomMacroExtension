@@ -19,6 +19,11 @@
             DataContext中转
             </summary>
         </member>
+        <member name="M:CustomMacroBase.CustomEffect.InvertColorEffect.#ctor">
+            <summary>
+            颜色反转
+            </summary>
+        </member>
         <member name="T:CustomMacroBase.CustomEffect.MagnifyEffect">
             <summary>An effect that magnifies a circular region.</summary>
         </member>
@@ -227,7 +232,7 @@
         <member name="M:CustomMacroBase.Helper.Tools.OtherManager.StickFixInfo.#ctor(System.Int32,System.Double,System.Double)">
             <summary>
             <para>_a：内圈死区&amp;反死区(0~127)</para>
-            <para>_b：输出放大(128~640)</para>
+            <para>_b：输出放大(128(1+1)~1280(1+0.1))</para>
             <para>_c：外圈死区(64~180)</para>
             </summary>
         </member>
@@ -691,6 +696,11 @@
             连起来
             </summary>
         </member>
+        <member name="M:CustomMacroBase.PreBase.GateBase.GenerateRandomString(System.Int32)">
+            <summary>
+            加盐
+            </summary>
+        </member>
         <member name="F:CustomMacroBase.PreBase.GateBase.GroupNameList">
             <summary>
             组名字典
@@ -729,6 +739,11 @@
         <member name="P:CustomMacroBase.PreBase.GateBase.DisableSliderButton">
             <summary>
             获取或设置SliderButton状态
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.PreBase.GateBase.Feature">
+            <summary>
+            特征码
             </summary>
         </member>
         <member name="P:CustomMacroBase.PreBase.GateBase.Children">
