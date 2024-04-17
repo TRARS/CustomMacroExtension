@@ -38,7 +38,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
 
         public void ApplyMapping(DS4StateLite v, double cycleActivationDuration, double cycleDuration)
         {
-            vStateLite = v;
+            v.CopyTo(ref vStateLite);
 
             Application.Current.Dispatcher.BeginInvoke(() =>
             {
