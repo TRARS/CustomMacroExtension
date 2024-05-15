@@ -165,8 +165,8 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
     //映射到键盘用
     public enum AutoCycle
     {
-        On,
-        Off
+        Yes,
+        No
     }
     public class MappingInfo<T> : NotificationObject
     {
@@ -244,8 +244,8 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
             Keys = keys;
             Cycle = autocycle switch
             {
-                AutoCycle.On => true,
-                AutoCycle.Off => false,
+                AutoCycle.Yes => true,
+                AutoCycle.No => false,
                 null => false,
                 _ => false
             };

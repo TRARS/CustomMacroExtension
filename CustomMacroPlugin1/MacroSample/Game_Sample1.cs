@@ -145,7 +145,7 @@ namespace CustomMacroPlugin1.MacroSample
 
                     sw.Restart();
                     {
-                        if (int.TryParse(FindNumber(new(1730, 1020, 130, 24)), out int cRunes))//Get the number of runes.
+                        if (int.TryParse(FindNumber(new(1730, 1020, 130, 24), CustomMacroBase.PixelMatcher.OpenCV.DeviceType.Mkldnn), out int cRunes))//Get the number of runes.
                         {
                             Print($"Runes: {cRunes} (+{cRunes - pRunes}) -> ({sw.ElapsedMilliseconds}ms)");
                             pRunes = cRunes;

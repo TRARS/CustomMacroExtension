@@ -28,6 +28,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
         public bool South => DirectionMap.Instance.South;
         public bool West => DirectionMap.Instance.West;
         public bool East => DirectionMap.Instance.East;
+        public bool L3 => vStateLite.L3;
         public bool DpadUp => vStateLite.DpadUp;
         public bool DpadDown => vStateLite.DpadDown;
         public bool DpadLeft => vStateLite.DpadLeft;
