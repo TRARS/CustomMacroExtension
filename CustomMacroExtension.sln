@@ -5,7 +5,11 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomMacroPlugin1", "CustomMacroPlugin1\CustomMacroPlugin1.csproj", "{E80F2307-6665-4B60-BC9D-97682E6A1720}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomMacroPlugin2", "CustomMacroPlugin2\CustomMacroPlugin2.csproj", "{A07857B2-C4EB-4CD9-9A26-E13CED5A3A61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomMacroPlugin2", "CustomMacroPlugin2\CustomMacroPlugin2.csproj", "{A07857B2-C4EB-4CD9-9A26-E13CED5A3A61}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomMacroPluginGamepadMixer", "CustomMacroPluginGamepadMixer\CustomMacroPluginGamepadMixer.csproj", "{123A1AA3-2578-4A14-910C-926E79182E81}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomMacroPluginTouchPadMapper", "CustomMacroPluginTouchPadMapper\CustomMacroPluginTouchPadMapper.csproj", "{D29C1537-4431-43BC-BD15-BF1D6CC20918}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,6 +20,10 @@ Global
 		{E80F2307-6665-4B60-BC9D-97682E6A1720}.Release|x64.Build.0 = Release|x64
 		{A07857B2-C4EB-4CD9-9A26-E13CED5A3A61}.Release|x64.ActiveCfg = Release|x64
 		{A07857B2-C4EB-4CD9-9A26-E13CED5A3A61}.Release|x64.Build.0 = Release|x64
+		{123A1AA3-2578-4A14-910C-926E79182E81}.Release|x64.ActiveCfg = Release|x64
+		{123A1AA3-2578-4A14-910C-926E79182E81}.Release|x64.Build.0 = Release|x64
+		{D29C1537-4431-43BC-BD15-BF1D6CC20918}.Release|x64.ActiveCfg = Release|x64
+		{D29C1537-4431-43BC-BD15-BF1D6CC20918}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
