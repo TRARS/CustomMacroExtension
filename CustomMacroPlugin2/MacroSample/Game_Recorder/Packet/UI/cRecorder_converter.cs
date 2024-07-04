@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -11,22 +12,22 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is List<UIElement>)
+            if (value is List<UIElement> || value is ObservableCollection<UIElement>)
             {
                 return value;
             }
 
             if (value is Path path)
             {
-                return new List<UIElement>() { path };
+                return new ObservableCollection<UIElement>() { path };
             }
 
             if (value is Path[] pathList)
             {
-                return new List<UIElement>() { pathList[0] };
+                return new ObservableCollection<UIElement>() { pathList[0] };
             }
 
-            return new List<UIElement>();
+            return Binding.DoNothing;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

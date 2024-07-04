@@ -54,6 +54,11 @@
             CurveType
             </summary>
         </member>
+        <member name="P:CustomMacroBase.CustomControlEx.StackPanelEx.cStackPanel.ItemsSource">
+            <summary>
+            <para>This property is invalid. Use the <see cref="P:CustomMacroBase.CustomControlEx.StackPanelEx.cStackPanel.Children" /> property instead of <see cref="P:System.Windows.Controls.ItemsControl.ItemsSource"/> property.</para>
+            </summary>
+        </member>
         <member name="M:CustomMacroBase.CustomEffect.InvertColorEffect.#ctor">
             <summary>
             颜色反转
@@ -97,6 +102,11 @@
         <member name="T:CustomMacroBase.Helper.Attributes.VersionAttribute">
             <summary>
             记录编译时间
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.Helper.Extensions.InitializerExtensions.Init``1(``0,System.Action{``0})">
+            <summary>
+            为对象提供一个初始化和配置的方法
             </summary>
         </member>
         <member name="M:CustomMacroBase.Helper.Extensions.MacroBaseExtensions.GetSortIndex(CustomMacroBase.MacroBase)">
@@ -183,6 +193,21 @@
         <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV0.Repeat_Condition">
             <summary>
             该值为true时令脚本可以循环
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV0.OnIterationStart">
+            <summary>
+            于每次迭代前被执行的回调函数
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV0.OnIterationEnd">
+            <summary>
+            于每次迭代后被执行的回调函数
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.Helper.Tools.FlowManager.FlowControllerV0.OnLoopEnd">
+            <summary>
+            于循环结束时被执行的回调函数
             </summary>
         </member>
         <member name="P:CustomMacroBase.Helper.Tools.FlowManager.ActionInfoV1.Key">
@@ -798,12 +823,12 @@
         </member>
         <member name="P:CustomMacroBase.PreBase.GateBase.IsChecked">
             <summary>
-            获取或设置滑块开关状态（供UI绑定）
+            获取或设置滑块开关状态（与父节点无关，仅供UI绑定）
             </summary>
         </member>
         <member name="P:CustomMacroBase.PreBase.GateBase.Enable">
             <summary>
-            获取或设置滑块开关状态（若父节点Enable为false，则必然返回false）
+            获取或设置滑块开关状态（与父节点相关，若父节点Enable为false，则必然返回false）
             </summary>
         </member>
         <member name="P:CustomMacroBase.PreBase.GateBase.HideSelf">
@@ -821,9 +846,14 @@
             特征码
             </summary>
         </member>
-        <member name="P:CustomMacroBase.PreBase.GateBase.TooltipText">
+        <member name="P:CustomMacroBase.PreBase.GateBase.TooltipPrefix">
             <summary>
-            气泡注释
+            气泡注释前缀
+            </summary>
+        </member>
+        <member name="P:CustomMacroBase.PreBase.GateBase.TooltipSuffix">
+            <summary>
+            气泡注释后缀
             </summary>
         </member>
         <member name="P:CustomMacroBase.PreBase.GateBase.Children">
@@ -1016,7 +1046,7 @@
             默认构造函数
             </summary>
         </member>
-        <member name="M:CustomMacroBase.MacroBase.SetTooltipText(CustomMacroBase.PreBase.GateBase,System.Boolean,System.String)">
+        <member name="M:CustomMacroBase.MacroBase.SetTooltipPrefix(CustomMacroBase.PreBase.GateBase,System.Boolean,System.String)">
             <summary>
             提示下标
             </summary>
@@ -1042,6 +1072,11 @@
         <member name="M:CustomMacroBase.MacroBase.CreateGateBase(System.String,System.Boolean,System.String,System.Boolean)">
             <summary>
             CreateGateBase
+            </summary>
+        </member>
+        <member name="M:CustomMacroBase.MacroBase.CreateTextBlock(System.String,System.Windows.Media.Color)">
+            <summary>
+            CreateTextBlock
             </summary>
         </member>
         <member name="M:CustomMacroBase.MacroBase.CreateSlider(System.Double,System.Double,System.Object,System.String,System.Double,System.String,System.Double,System.String,System.Boolean,System.Windows.HorizontalAlignment,System.Windows.VerticalAlignment)">
