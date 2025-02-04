@@ -10,10 +10,18 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Configurations>Release</Configurations>
   </PropertyGroup>
-  
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="CustomMacroBase">
-      <HintPath>..\libs\CustomMacroBase.dll</HintPath>
+      <HintPath>..\SharedLibs\libs\CustomMacroBase.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TrarsUI.Shared">
+      <HintPath>..\SharedLibs\libs\TrarsUI.Shared.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

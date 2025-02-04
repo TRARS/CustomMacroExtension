@@ -1,5 +1,4 @@
 ﻿using CustomMacroBase.Helper;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -69,7 +68,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
         public ICommand? StartBtnCommand { get; set; } = null;
         public ICommand? StopBtnCommand { get; set; } = null;
 
-        public Action? DeleteAction { get; set; } = null;
+        public ICommand? DeleteActionCommand { get; set; } = null;
 
         public bool ItemHitTest { get; set; } = false;
     }

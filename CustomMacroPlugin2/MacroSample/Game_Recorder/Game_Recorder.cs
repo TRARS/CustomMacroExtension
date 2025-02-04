@@ -54,7 +54,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
 
             MainGate.Add(CreateGateBase("send to procon emulator", false, hideself: debug_flag["SendToProCon"]));//[2]
             MainGate.AddEx(() => CreateSlider(0, 1000, model, nameof(model.DefDurationValue), 1, sliderTextPrefix: "DefaultDuration: ", defalutValue: 500, sliderTextSuffix: "ms", hideself: debug_flag["DefDuration slider"]));
-            MainGate.AddEx(() => { return new cRecorder() { Width = 320, Height = 240, Margin = new Thickness(0, 4, 0, 4) }; });
+            MainGate.AddEx(() => new cRecorder() { Width = 320, Height = 240, Margin = new Thickness(0, 4, 0, 4) });
 
             Mediator.Instance.Register(RecorderMessageType.Instance.StartRecordedAction, _ =>
             {

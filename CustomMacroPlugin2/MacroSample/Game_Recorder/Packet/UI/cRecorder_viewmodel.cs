@@ -1,4 +1,6 @@
-﻿using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using CustomMacroBase.Helper;
+using CustomMacroBase.Messages;
 using CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base;
 using System;
 using System.Collections.Generic;
@@ -58,11 +60,10 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             get { return model.StopBtnCommand; }
             set { model.StopBtnCommand = value; NotifyPropertyChanged(); }
         }
-
-        public Action? DeleteAction
+        public ICommand? DeleteActionCommand
         {
-            get { return model.DeleteAction; }
-            set { model.DeleteAction = value; NotifyPropertyChanged(); }
+            get { return model.DeleteActionCommand; }
+            set { model.DeleteActionCommand = value; NotifyPropertyChanged(); }
         }
 
         public bool ItemHitTest
@@ -125,13 +126,17 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             });
 
             //Init_DeleteAction
-            this.DeleteAction = () =>
+            this.DeleteActionCommand = new RelayCommand(_ =>
             {
-                if (currentItemModel is not null)
+                Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    ItemsSource.Remove((Minunit)currentItemModel);//删除当前鼠标经过的那个Item
-                }
-            };
+                    if (currentItemModel is not null)
+                    {
+                        var flag0 = currentItemModel is not null;
+                        var flag1 = ItemsSource.Remove((Minunit)currentItemModel);//删除当前鼠标经过的那个Item
+                    }
+                });
+            });
         }
     }
 
@@ -139,11 +144,11 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
     {
         private protected void Print([CallerMemberName] string str = "")
         {
-            Mediator.Instance.NotifyColleagues(MessageType.PrintNewMessage, str);
+            WeakReferenceMessenger.Default.Send(new PrintNewMessage(str));
         }
         private protected void PrintClear([CallerMemberName] string str = "")
         {
-            Mediator.Instance.NotifyColleagues(MessageType.PrintCleanup, str);
+            WeakReferenceMessenger.Default.Send(new PrintCleanup(str));
         }
 
         private protected void Start([CallerMemberName] string str = "")

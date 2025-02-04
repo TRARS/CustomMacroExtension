@@ -1,5 +1,7 @@
-﻿using CustomMacroBase.GamePadState;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using CustomMacroBase.GamePadState;
 using CustomMacroBase.Helper;
+using CustomMacroBase.Messages;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -189,7 +191,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base
 
         private protected void Print([CallerMemberName] string str = "")
         {
-            Mediator.Instance.NotifyColleagues(MessageType.PrintNewMessage, str);
+            WeakReferenceMessenger.Default.Send(new PrintCleanup(str));
         }
         private protected void Send(RecorderData obj)
         {

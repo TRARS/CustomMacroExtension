@@ -1,4 +1,6 @@
-﻿using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using CustomMacroBase.Helper;
+using CustomMacroBase.Messages;
 using CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base;
 using System;
 using System.Collections.Generic;
@@ -177,7 +179,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
                 if (para is MappingInfoPacket<KeyboardKeys> model)
                 {
                     CurrentBtnPos = model.BtnPos;
-                    Mediator.Instance.NotifyColleagues(MessageType.PrintNewMessage, model.Comment);
+                    WeakReferenceMessenger.Default.Send(new PrintNewMessage(model.Comment));
                 }
                 else
                 {
