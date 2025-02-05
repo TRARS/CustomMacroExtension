@@ -1,41 +1,11 @@
-﻿using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
 {
-    //飞消息用
-    public class JoyConMapperMessageType
-    {
-        private static readonly Lazy<JoyConMapperMessageType> lazyObject = new(() => new JoyConMapperMessageType());
-        public static JoyConMapperMessageType Instance => lazyObject.Value;
-
-        public string GetCurrentJoyConMapperMouseEnterItemModel { get; init; }
-
-        public JoyConMapperMessageType()
-        {
-            GetCurrentJoyConMapperMouseEnterItemModel = nameof(GetCurrentJoyConMapperMouseEnterItemModel) + GenerateRandomString(16);
-        }
-
-        private Random random = new Random();
-        private string GenerateRandomString(int length)
-        {
-            const string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (int i = 0; i < length; i++)
-            {
-                int index = random.Next(chars.Length);
-                stringBuilder.Append(chars[index]);
-            }
-
-            return stringBuilder.ToString();
-        }
-    }
-
     //二值化用
     public enum StickPosition
     {
@@ -168,7 +138,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
         Yes,
         No
     }
-    public class MappingInfo<T> : NotificationObject
+    public class MappingInfo<T> : ObservableObject
     {
         public Func<bool> Condition { get; set; }
         public T[] Keys { get; set; }
@@ -178,13 +148,13 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
         public List<string> CycleEnumList
         {
             get { return _CycleEnumList; }
-            set { _CycleEnumList = value; NotifyPropertyChanged(); }
+            set { _CycleEnumList = value; OnPropertyChanged(); }
         }
         private bool _Cycle;
         public bool Cycle
         {
             get => _Cycle;
-            set { _Cycle = value; NotifyPropertyChanged(); }
+            set { _Cycle = value; OnPropertyChanged(); }
         }
 
         //第一个Key
@@ -192,26 +162,26 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base
         public List<T> KeyEnumList0
         {
             get { return _KeyEnumList0; }
-            set { _KeyEnumList0 = value; NotifyPropertyChanged(); }
+            set { _KeyEnumList0 = value; OnPropertyChanged(); }
         }
         private int _SelectedKey0 = 0;
         public int SelectedKey0
         {
             get { return _SelectedKey0; }
-            set { _SelectedKey0 = value; NotifyPropertyChanged(); }
+            set { _SelectedKey0 = value; OnPropertyChanged(); }
         }
         //第二个Key
         private List<T> _KeyEnumList1 = new();
         public List<T> KeyEnumList1
         {
             get { return _KeyEnumList1; }
-            set { _KeyEnumList1 = value; NotifyPropertyChanged(); }
+            set { _KeyEnumList1 = value; OnPropertyChanged(); }
         }
         private int _SelectedKey1 = 0;
         public int SelectedKey1
         {
             get { return _SelectedKey1; }
-            set { _SelectedKey1 = value; NotifyPropertyChanged(); }
+            set { _SelectedKey1 = value; OnPropertyChanged(); }
         }
 
         //Key汇总

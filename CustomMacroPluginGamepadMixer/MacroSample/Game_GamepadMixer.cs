@@ -1,7 +1,7 @@
-﻿using CustomMacroBase;
+﻿using CommunityToolkit.Mvvm.Input;
+using CustomMacroBase;
 using CustomMacroBase.CustomControlEx.RippleButtonEx;
 using CustomMacroBase.GamePadState;
-using CustomMacroBase.Helper;
 using CustomMacroBase.PreBase;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -42,7 +42,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                             Height = 22,
                             Type = ButtonType.Custom,
                             Text = "Enable All",
-                            Command = new RelayCommand(_ =>
+                            Command = new RelayCommand(() =>
                             {
                                 MainGate[1].GateBaseList.ForEach(x => x.Enable = true);
                             }),
@@ -54,7 +54,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                             Height = 22,
                             Type = ButtonType.Custom,
                             Text = "Disable All",
-                            Command = new RelayCommand(_ =>
+                            Command = new RelayCommand(() =>
                             {
                                 MainGate[1].GateBaseList.ForEach(x => x.Enable = false);
                             }),

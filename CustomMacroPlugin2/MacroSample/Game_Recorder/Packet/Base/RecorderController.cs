@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using CustomMacroBase.GamePadState;
-using CustomMacroBase.Helper;
 using CustomMacroBase.Messages;
 using System;
 using System.Collections.Generic;
@@ -116,7 +115,10 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base
 
         public RecorderBase()
         {
-            Mediator.Instance.Register(RecorderMessageType.Instance.ApplyRecord, (para) => { Actions = (List<RecorderAction>)para; });
+            WeakReferenceMessenger.Default.Register<ApplyRecord>(this, (r, m) =>
+            {
+                Actions = m.Value;
+            });
 
             StateMachineListA = RecorderKeyList.Instance.ButtonList.Select(key => new BtnStateMachine(key, state => { NotifySend(key, state); })).ToList();
             StateMachineListB = RecorderKeyList.Instance.TriggerList.Select(key => new BtnStateMachine(key, state => { NotifySend(key, state); })).ToList();
@@ -195,7 +197,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base
         }
         private protected void Send(RecorderData obj)
         {
-            Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.Record, obj);
+            WeakReferenceMessenger.Default.Send(new Record(obj));
         }
     }
 }

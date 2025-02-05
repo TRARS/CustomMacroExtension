@@ -1,5 +1,5 @@
-﻿using CustomMacroBase;
-using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CustomMacroBase;
 using CustomMacroBase.Helper.Attributes;
 using CustomMacroBase.Helper.Tools.OtherManager;
 using CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base;
@@ -14,7 +14,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
 {
     partial class Game_JoyConMapper
     {
-        class InnerModel : NotificationObject
+        class InnerModel : ObservableObject
         {
             //
             private double _LeftStickDeadZone = 0;
@@ -26,7 +26,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
                     if (_LeftStickDeadZone != value)
                     {
                         _LeftStickDeadZone = Math.Floor(value);
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -39,7 +39,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
                     if (_LeftStickEnlargementFactor != value)
                     {
                         _LeftStickEnlargementFactor = Math.Floor(value);
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -52,7 +52,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
                     if (_LeftStickClipRadius != value)
                     {
                         _LeftStickClipRadius = Math.Floor(value);
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -67,7 +67,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
                     if (_CycleActivationDuration != value)
                     {
                         _CycleActivationDuration = Math.Floor(value);
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -80,7 +80,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
                     if (_CycleDuration != value)
                     {
                         _CycleDuration = Math.Floor(value);
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }

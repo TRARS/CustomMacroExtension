@@ -1,75 +1,34 @@
-﻿using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
+using System.Text.Json.Serialization;
 
 namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
 {
-    public class Minunit : NotificationObject
+    public partial class Minunit : ObservableObject
     {
-        private string _Name = string.Empty;
-        public string Name
-        {
-            get { return _Name; }
-            set { _Name = value; NotifyPropertyChanged(); }
-        }
+        [property: JsonIgnore]
+        [ObservableProperty]
+        private string name = string.Empty;
 
-        private List<string> _KeyList = new();
-        public List<string> KeyList
-        {
-            get { return _KeyList; }
-            set { _KeyList = value; NotifyPropertyChanged(); }
-        }
+        [property: JsonIgnore]
+        [ObservableProperty]
+        private List<string> keyList = new();
 
-        private List<string> _ValueList = new();
-        public List<string> ValueList
-        {
-            get { return _ValueList; }
-            set { _ValueList = value; NotifyPropertyChanged(); }
-        }
+        [property: JsonIgnore]
+        [ObservableProperty]
+        private List<string> valueList = new();
 
-        private ObservableCollection<Minunit> _Parent = new();
-        public ObservableCollection<Minunit> Parent
-        {
-            get { return _Parent; }
-            set { _Parent = value; NotifyPropertyChanged(); }
-        }
+        [JsonIgnore]
+        public ObservableCollection<Minunit> Parent { get; set; } = new();
 
-        private int _SelectedKey = 0;
-        public int SelectedKey
-        {
-            get { return _SelectedKey; }
-            set { _SelectedKey = value; NotifyPropertyChanged(); }
-        }
+        [ObservableProperty]
+        private int selectedKey = 0;
 
-        private int _SelectedValue = 0;
-        public int SelectedValue
-        {
-            get { return _SelectedValue; }
-            set { _SelectedValue = value; NotifyPropertyChanged(); }
-        }
+        [ObservableProperty]
+        private int selectedValue = 0;
 
-        private int _Duration = 0;
-        public int Duration
-        {
-            get { return _Duration; }
-            set { _Duration = value; NotifyPropertyChanged(); }
-        }
-    }
-
-    public class cRecorder_model
-    {
-        public string Title { get; set; } = string.Empty;
-        public ObservableCollection<Minunit> ItemsSource { get; set; } = new();
-
-        public ICommand? ApplyBtnCommand { get; set; } = null;
-        public ICommand? AddBtnCommand { get; set; } = null;
-        public ICommand? ClearBtnCommand { get; set; } = null;
-        public ICommand? StartBtnCommand { get; set; } = null;
-        public ICommand? StopBtnCommand { get; set; } = null;
-
-        public ICommand? DeleteActionCommand { get; set; } = null;
-
-        public bool ItemHitTest { get; set; } = false;
+        [ObservableProperty]
+        private int duration = 0;
     }
 }

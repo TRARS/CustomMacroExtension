@@ -1,14 +1,18 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
-using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using CustomMacroBase.Messages;
 using CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Windows;
-using System.Windows.Input;
 
 namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
 {
@@ -19,58 +23,26 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
         public static cRecorder_viewmodel Instance => lazyObject.Value;
     }
 
-    public partial class cRecorder_viewmodel : NotificationObject
+    public partial class cRecorder_viewmodel : ObservableObject
     {
-        cRecorder_model model = new();
+        private JsonSerializerOptions jsonOptions = new JsonSerializerOptions
+        {
+            Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            AllowTrailingCommas = true,
+            WriteIndented = true
+        };
 
-        public string Title
-        {
-            get { return model.Title; }
-            set { model.Title = value; NotifyPropertyChanged(); }
-        }
+        [ObservableProperty]
+        private string title;
 
-        public ObservableCollection<Minunit> ItemsSource
-        {
-            get { return model.ItemsSource; }
-            set { model.ItemsSource = value; NotifyPropertyChanged(); }
-        }
+        public ObservableCollection<Minunit> ItemsSource { get; set; } = new();
 
-        public ICommand? ApplyBtnCommand
-        {
-            get { return model.ApplyBtnCommand; }
-            set { model.ApplyBtnCommand = value; NotifyPropertyChanged(); }
-        }
-        public ICommand? AddBtnCommand
-        {
-            get { return model.AddBtnCommand; }
-            set { model.AddBtnCommand = value; NotifyPropertyChanged(); }
-        }
-        public ICommand? ClearBtnCommand
-        {
-            get { return model.ClearBtnCommand; }
-            set { model.ClearBtnCommand = value; NotifyPropertyChanged(); }
-        }
-        public ICommand? StartBtnCommand
-        {
-            get { return model.StartBtnCommand; }
-            set { model.StartBtnCommand = value; NotifyPropertyChanged(); }
-        }
-        public ICommand? StopBtnCommand
-        {
-            get { return model.StopBtnCommand; }
-            set { model.StopBtnCommand = value; NotifyPropertyChanged(); }
-        }
-        public ICommand? DeleteActionCommand
-        {
-            get { return model.DeleteActionCommand; }
-            set { model.DeleteActionCommand = value; NotifyPropertyChanged(); }
-        }
+        [ObservableProperty]
+        private bool itemHitTest;
 
-        public bool ItemHitTest
-        {
-            get { return model.ItemHitTest; }
-            set { model.ItemHitTest = value; NotifyPropertyChanged(); }
-        }
+        private Minunit? currentItemModel;
     }
 
     public partial class cRecorder_viewmodel
@@ -84,18 +56,13 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             keyList.Insert(0, string.Empty); keyList.AddRange(new List<string>() { "Left Stick", "Right Stick" });
             valueList.Insert(0, string.Empty);
 
-            //Init_Command
-            this.ApplyBtnCommand = new RelayCommand(_ => { ApplyBtnAction(); });
-            this.AddBtnCommand = new RelayCommand(_ => { AddBtnAction(); });
-            this.ClearBtnCommand = new RelayCommand(_ => { ClearBtnAction(); });
-            this.StartBtnCommand = new RelayCommand(_ => { StartBtnAction(); });
-            this.StopBtnCommand = new RelayCommand(_ => { StopBtnAction(); });
-
             //Init_Delegate
             int previous_duration = 0;
-            Mediator.Instance.Register(RecorderMessageType.Instance.Record, (para) =>
+            WeakReferenceMessenger.Default.Register<Record>(this, (r, m) =>
             {
-                previous_duration = ((RecorderData)para).Holdtime;//'上个动作'到'当前动作'的时间间隔
+                var recorderData = m.Value;
+
+                previous_duration = recorderData.Holdtime;//'上个动作'到'当前动作'的时间间隔
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     try
@@ -107,35 +74,24 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
                             KeyList = keyList,
                             ValueList = valueList,
                             Parent = this.ItemsSource,
-                            SelectedKey = keyList.IndexOf(((RecorderData)para).Key),
-                            SelectedValue = valueList.IndexOf(((RecorderData)para).State),
-                            Duration = ((RecorderData)para).DefaultDuration //0
+                            SelectedKey = keyList.IndexOf(recorderData.Key),
+                            SelectedValue = valueList.IndexOf(recorderData.State),
+                            Duration = recorderData.DefaultDuration //0
                         });
+                        Print($"k:{recorderData.Key}, v:{recorderData.State}");
                     }
                     catch (Exception ex) { MessageBox.Show(ex.Message); }
                 });
             });
 
-            dynamic? currentItemModel = null;
-            Mediator.Instance.Register(RecorderMessageType.Instance.GetCurrentRecorderMouseEnterItemModel, (para) => { currentItemModel = para; });
-
-            Mediator.Instance.Register(RecorderMessageType.Instance.ItemHitTest, (para) =>
+            WeakReferenceMessenger.Default.Register<GetCurrentRecorderMouseEnterItemModel>(this, (r, m) =>
             {
-                ItemHitTest = ((bool)para);
-                //Mediator.Instance.NotifyColleagues(MessageType.PrintNewMessage, $"ItemHitTest = {ItemHitTest}");
+                currentItemModel = m.Value;
             });
 
-            //Init_DeleteAction
-            this.DeleteActionCommand = new RelayCommand(_ =>
+            WeakReferenceMessenger.Default.Register<ItemHitTest>(this, (r, m) =>
             {
-                Application.Current.Dispatcher.BeginInvoke(() =>
-                {
-                    if (currentItemModel is not null)
-                    {
-                        var flag0 = currentItemModel is not null;
-                        var flag1 = ItemsSource.Remove((Minunit)currentItemModel);//删除当前鼠标经过的那个Item
-                    }
-                });
+                ItemHitTest = m.Value;
             });
         }
     }
@@ -153,15 +109,21 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
 
         private protected void Start([CallerMemberName] string str = "")
         {
-            Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.StartRecordedAction, str);
+            WeakReferenceMessenger.Default.Send(new StartRecordedAction(str));
         }
         private protected void Stop([CallerMemberName] string str = "")
         {
-            Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.StopRecordedAction, str);
+            WeakReferenceMessenger.Default.Send(new StopRecordedAction(str));
+        }
+
+        private protected void SetCurrentActions(List<RecorderAction>? statelist)
+        {
+            if (statelist is null) { return; }
+            WeakReferenceMessenger.Default.Send(new ApplyRecord(statelist));
         }
 
         //
-        private void TrySetRecordedItemToStateList()
+        private List<RecorderAction>? TrySetRecordedItemToStateList()
         {
             List<RecorderAction> statelist = new();
             List<string> directions = new() { "↑", "↓", "← ", "→", "↖", "↗", "↙", "↘" };
@@ -281,34 +243,122 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
                 Print($"Ratio of actions with non-zero duration to total actions: {valid_action_count}/{statelist.Count}");
             }
 
-            if (statelist.Count > 0 && delay_check is false) { return; }
+            if (statelist.Count > 0 && delay_check is false) { return null; }
 
-            Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.ApplyRecord, statelist);
+            return statelist;
         }
 
-
-        private void ApplyBtnAction()
+        [RelayCommand]
+        private void OnApplyBtn()
         {
             this.PrintClear();
-            this.TrySetRecordedItemToStateList();
+            this.SetCurrentActions(this.TrySetRecordedItemToStateList());
+            this.Print();
         }
-        private void AddBtnAction()
+        [RelayCommand]
+        private void OnAddBtn()
         {
-            this.ItemsSource.Add(new() { Name = $"{this.ItemsSource.Count}", KeyList = keyList, ValueList = valueList, Parent = this.ItemsSource }); //Print("Add");
+            this.ItemsSource.Add(new() { Name = $"{this.ItemsSource.Count}", KeyList = keyList, ValueList = valueList, Parent = this.ItemsSource });
+            this.Print();
         }
-        private void ClearBtnAction()
+        [RelayCommand]
+        private void OnClearBtn()
         {
             this.PrintClear();
             this.ItemsSource.Clear();
-            this.TrySetRecordedItemToStateList();
+            this.SetCurrentActions(this.TrySetRecordedItemToStateList());
+            this.Print();
         }
-        private void StartBtnAction()
+        [RelayCommand]
+        private void OnStartBtn()
         {
             this.Start();
+            this.Print();
         }
-        private void StopBtnAction()
+        [RelayCommand]
+        private void OnStopBtn()
         {
             this.Stop();
+            this.Print();
+        }
+
+        [RelayCommand]
+        private void OnDelete()
+        {
+            Application.Current.Dispatcher.BeginInvoke(() =>
+            {
+                if (currentItemModel is null) { return; }
+
+                ItemsSource.Remove(currentItemModel);//删除当前鼠标经过的那个Item
+
+                this.Print();
+            });
+        }
+
+        [RelayCommand]
+        private void OnSave()
+        {
+            this.PrintClear();
+
+            var actions = this.ItemsSource;
+            if (!(actions is not null && actions.Count > 0)) { return; }
+
+            try
+            {
+                var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                var savePath = Path.Combine(desktopPath, "cRecorder.json");
+                using (StreamWriter sw = new StreamWriter($"{savePath}", false, Encoding.Unicode))
+                {
+                    sw.WriteLine(JsonSerializer.Serialize(actions, jsonOptions));
+                }
+            }
+            catch (Exception ex)
+            {
+                Print(ex.Message);
+            }
+            finally
+            {
+                Print();
+            }
+        }
+        [RelayCommand]
+        private void OnLoad()
+        {
+            this.PrintClear();
+
+            try
+            {
+                var desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                var loadPath = Path.Combine(desktopPath, "cRecorder.json");
+
+                if (!File.Exists(loadPath))
+                    throw new FileNotFoundException($"Config file not found at: {loadPath}");
+
+                var json = File.ReadAllText(loadPath, Encoding.Unicode);
+
+                var config = JsonSerializer.Deserialize<List<Minunit>>(json, jsonOptions);
+
+                if (config is not null && config.Count > 0)
+                {
+                    this.ItemsSource.Clear();
+                    foreach (var item in config)
+                    {
+                        item.Name = $"{this.ItemsSource.Count}";
+                        item.KeyList = keyList;
+                        item.ValueList = valueList;
+                        item.Parent = this.ItemsSource;
+                        this.ItemsSource.Add(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Print(ex.Message);
+            }
+            finally
+            {
+                Print();
+            }
         }
     }
 }

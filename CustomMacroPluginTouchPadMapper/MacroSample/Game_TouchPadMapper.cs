@@ -1,5 +1,5 @@
-﻿using CustomMacroBase;
-using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CustomMacroBase;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -24,7 +24,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
             public ObservableCollection<double> DoubleList = new(Enumerable.Repeat(0d, 20));
         }
 
-        class InnerViewModel : NotificationObject
+        class InnerViewModel : ObservableObject
         {
             InnerModel model = new();
 
@@ -38,7 +38,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                     if (model.IntList[0] != value)
                     {
                         model.IntList[0] = value;
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -50,7 +50,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                     if (model.IntList[1] != value)
                     {
                         model.IntList[1] = value;
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -62,7 +62,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                     if (model.IntList[2] != value)
                     {
                         model.IntList[2] = value;
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -74,7 +74,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                     if (model.IntList[3] != value)
                     {
                         model.IntList[3] = value;
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                     if (model.IntList[4] != value)
                     {
                         model.IntList[4] = value;
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -100,7 +100,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                     if (model.IntList[5] != value)
                     {
                         model.IntList[5] = value;
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }

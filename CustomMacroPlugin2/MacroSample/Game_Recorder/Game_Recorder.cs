@@ -1,5 +1,6 @@
-﻿using CustomMacroBase;
-using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using CustomMacroBase;
 using CustomMacroBase.Helper.Attributes;
 using CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base;
 using CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI;
@@ -12,7 +13,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
 {
     public partial class Game_Recorder
     {
-        class InnerModel : NotificationObject
+        class InnerModel : ObservableObject
         {
             private double _DefDurationValue = 0;
             public double DefDurationValue
@@ -23,7 +24,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
                     if (_DefDurationValue != value)
                     {
                         _DefDurationValue = Math.Floor(value);
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -56,7 +57,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
             MainGate.AddEx(() => CreateSlider(0, 1000, model, nameof(model.DefDurationValue), 1, sliderTextPrefix: "DefaultDuration: ", defalutValue: 500, sliderTextSuffix: "ms", hideself: debug_flag["DefDuration slider"]));
             MainGate.AddEx(() => new cRecorder() { Width = 320, Height = 240, Margin = new Thickness(0, 4, 0, 4) });
 
-            Mediator.Instance.Register(RecorderMessageType.Instance.StartRecordedAction, _ =>
+            WeakReferenceMessenger.Default.Register<StartRecordedAction>(this, (r, m) =>
             {
                 Task.Run(async () =>
                 {
@@ -65,7 +66,8 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
                     tryStart = false;
                 });
             });
-            Mediator.Instance.Register(RecorderMessageType.Instance.StopRecordedAction, _ =>
+
+            WeakReferenceMessenger.Default.Register<StopRecordedAction>(this, (r, m) =>
             {
                 Task.Run(async () =>
                 {

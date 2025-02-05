@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
-using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using CustomMacroBase.Messages;
 using CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base;
 using System;
@@ -18,7 +18,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
         public static cJoyConMapper_viewmodel Instance => lazyObject.Value;
     }
 
-    public partial class cJoyConMapper_viewmodel : NotificationObject
+    public partial class cJoyConMapper_viewmodel : ObservableObject
     {
         cJoyConMapper_model model = new();
 
@@ -28,7 +28,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
             set
             {
                 model.CurrentBtnPos = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public BitmapImage GamePadImage
@@ -37,7 +37,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
             set
             {
                 model.GamePadImage = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<MappingInfoPacket<KeyboardKeys>> KeyboardMappingInfoList
@@ -46,7 +46,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
             set
             {
                 model.KeyboardMappingInfoList = value;
-                NotifyPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -174,9 +174,9 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
 
 
             //
-            Mediator.Instance.Register(JoyConMapperMessageType.Instance.GetCurrentJoyConMapperMouseEnterItemModel, (para) =>
+            WeakReferenceMessenger.Default.Register<GetCurrentJoyConMapperMouseEnterItemModel<KeyboardKeys>>(this, (r, m) =>
             {
-                if (para is MappingInfoPacket<KeyboardKeys> model)
+                if (m.Value is MappingInfoPacket<KeyboardKeys> model)
                 {
                     CurrentBtnPos = model.BtnPos;
                     WeakReferenceMessenger.Default.Send(new PrintNewMessage(model.Comment));

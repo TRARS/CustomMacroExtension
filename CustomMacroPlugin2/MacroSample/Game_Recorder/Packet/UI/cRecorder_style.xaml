@@ -396,7 +396,7 @@
                                                                                Icon="{Binding ElementName=deletePath,
                                                                                               Converter={StaticResource cRecorder_converter_listcheck},
                                                                                               Mode=OneWay}"
-                                                                               Command="{Binding DataContext.DeleteActionCommand, 
+                                                                               Command="{Binding DataContext.DeleteCommand, 
                                                                                                  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:cRecorder}}}"
                                                                                Width="auto" Height="auto"/>
                                         </StackPanel>
@@ -609,8 +609,8 @@
                                         <ColumnDefinition Width="1"/>
                                     </Grid.ColumnDefinitions>
                                     
-                                    <Button Grid.Column="1" Style="{StaticResource cRecorderBtn}" Content="Save" Command="{Binding ApplyBtnCommand}"/>
-                                    <Button Grid.Column="2" Style="{StaticResource cRecorderBtn}" Content="Load" Command="{Binding AddBtnCommand}"/>
+                                    <Button Grid.Column="1" Style="{StaticResource cRecorderBtn}" Content="Save" Command="{Binding SaveCommand}"/>
+                                    <Button Grid.Column="2" Style="{StaticResource cRecorderBtn}" Content="Load" Command="{Binding LoadCommand}"/>
                                 </Grid>
                             </Border>
                         </Grid>

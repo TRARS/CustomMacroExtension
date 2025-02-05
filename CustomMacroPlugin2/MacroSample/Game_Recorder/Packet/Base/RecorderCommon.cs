@@ -2,50 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base
 {
-    //飞消息用（不使用enum，使用string，省得撞数字）
-    public class RecorderMessageType
-    {
-        private static readonly Lazy<RecorderMessageType> lazyObject = new(() => new RecorderMessageType());
-        public static RecorderMessageType Instance => lazyObject.Value;
-
-        public string Record { get; init; }
-        public string ApplyRecord { get; init; }
-        public string StartRecordedAction { get; init; }
-        public string StopRecordedAction { get; init; }
-        public string GetCurrentRecorderMouseEnterItemModel { get; init; }
-        public string ItemHitTest { get; init; }
-
-        private RecorderMessageType()
-        {
-            Record = nameof(Record) + GenerateRandomString(16);
-            ApplyRecord = nameof(ApplyRecord) + GenerateRandomString(16);
-            StartRecordedAction = nameof(StartRecordedAction) + GenerateRandomString(16);
-            StopRecordedAction = nameof(StopRecordedAction) + GenerateRandomString(16);
-            GetCurrentRecorderMouseEnterItemModel = nameof(GetCurrentRecorderMouseEnterItemModel) + GenerateRandomString(16);
-            ItemHitTest = nameof(ItemHitTest) + GenerateRandomString(16);
-        }
-
-        private Random random = new Random();
-        private string GenerateRandomString(int length)
-        {
-            const string chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (int i = 0; i < length; i++)
-            {
-                int index = random.Next(chars.Length);
-                stringBuilder.Append(chars[index]);
-            }
-
-            return stringBuilder.ToString();
-        }
-    }
-
     //二值化用
     public enum StickPosition
     {
@@ -150,7 +110,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base
     {
         public RecorderKeyType Type { get; set; }
         public string Key { get; set; }
-        public dynamic Value { get; set; } //byte or bool
+        public object Value { get; set; } //byte or bool
         public byte X { get; set; }
         public byte Y { get; set; }
         public int Duration { get; set; }

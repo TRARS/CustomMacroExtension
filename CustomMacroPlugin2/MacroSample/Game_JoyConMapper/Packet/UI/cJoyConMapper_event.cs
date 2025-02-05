@@ -1,4 +1,4 @@
-﻿using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.Base;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,11 +10,11 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI
     {
         private void ListBoxItem_MouseLeave(object s, MouseEventArgs e)
         {
-            Mediator.Instance.NotifyColleagues(JoyConMapperMessageType.Instance.GetCurrentJoyConMapperMouseEnterItemModel, null);
+            WeakReferenceMessenger.Default.Send(new GetCurrentJoyConMapperMouseEnterItemModel<KeyboardKeys>(null));
         }
         private void ListBoxItem_MouseEnter(object s, MouseEventArgs e)
         {
-            Mediator.Instance.NotifyColleagues(JoyConMapperMessageType.Instance.GetCurrentJoyConMapperMouseEnterItemModel, (MappingInfoPacket<KeyboardKeys>)((ListBoxItem)s).DataContext);
+            WeakReferenceMessenger.Default.Send(new GetCurrentJoyConMapperMouseEnterItemModel<KeyboardKeys>((MappingInfoPacket<KeyboardKeys>)((ListBoxItem)s).DataContext));
         }
 
         private void ComboBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

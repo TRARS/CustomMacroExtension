@@ -1,4 +1,4 @@
-﻿using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.Messaging;
 using CustomMacroBase.Helper.Extensions;
 using CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.Base;
 using System;
@@ -36,7 +36,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
                 move_source = (ListBoxItem)s;
                 move_source.Opacity = 0.5;
 
-                Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.ItemHitTest, false);
+                WeakReferenceMessenger.Default.Send(new ItemHitTest(false));
             }
         }
         private void PreviewMouseLeftButtonUp(object s, MouseButtonEventArgs e)
@@ -68,11 +68,12 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
         private void MouseLeave(object s, MouseEventArgs e)
         {
             ((ListBoxItem)s).RemoveAdorner();
-            Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.GetCurrentRecorderMouseEnterItemModel, null);
+            WeakReferenceMessenger.Default.Send(new GetCurrentRecorderMouseEnterItemModel(null));
+
         }
         private void MouseEnter(object s, MouseEventArgs e)
         {
-            Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.GetCurrentRecorderMouseEnterItemModel, (Minunit)((ListBoxItem)s).DataContext);
+            WeakReferenceMessenger.Default.Send(new GetCurrentRecorderMouseEnterItemModel((Minunit)((ListBoxItem)s).DataContext));
         }
     }
 
@@ -116,7 +117,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI
             {
                 move_source = move_target = null;
                 isDrag = false;
-                Mediator.Instance.NotifyColleagues(RecorderMessageType.Instance.ItemHitTest, true);
+                WeakReferenceMessenger.Default.Send(new ItemHitTest(true));
             }
         }
         private void ListBox_OnScrollChanged(object s, ScrollChangedEventArgs e)

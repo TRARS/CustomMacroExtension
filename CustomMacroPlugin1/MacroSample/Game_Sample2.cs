@@ -1,5 +1,5 @@
-﻿using CustomMacroBase;
-using CustomMacroBase.Helper;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CustomMacroBase;
 using CustomMacroBase.Helper.Attributes;
 using CustomMacroBase.Helper.Tools.FlowManager;
 using System;
@@ -27,7 +27,7 @@ namespace CustomMacroPlugin1.MacroSample
             }
         }
 
-        class InnerViewModel : NotificationObject
+        class InnerViewModel : ObservableObject
         {
             InnerModel model = new();
 
@@ -39,7 +39,7 @@ namespace CustomMacroPlugin1.MacroSample
                     if (model.SliderValue != value)
                     {
                         model.SliderValue = Math.Floor(value);
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -51,7 +51,7 @@ namespace CustomMacroPlugin1.MacroSample
                     if (model.ComboBoxSelectedItem != value)
                     {
                         model.ComboBoxSelectedItem = value;
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
@@ -63,7 +63,7 @@ namespace CustomMacroPlugin1.MacroSample
                     if (model.ComboBoxItemsSource != value)
                     {
                         model.ComboBoxItemsSource = value;
-                        NotifyPropertyChanged();
+                        OnPropertyChanged();
                     }
                 }
             }
