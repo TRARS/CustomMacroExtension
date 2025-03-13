@@ -44,7 +44,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                             Text = "Enable All",
                             Command = new RelayCommand(() =>
                             {
-                                MainGate[1].GateBaseList.ForEach(x => x.Enable = true);
+                                MainGate[1].GateBaseList.ForEach(x => x.IsChecked = true);
                             }),
                             Margin = new(0, 0, 5, 0),
                         });
@@ -56,7 +56,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                             Text = "Disable All",
                             Command = new RelayCommand(() =>
                             {
-                                MainGate[1].GateBaseList.ForEach(x => x.Enable = false);
+                                MainGate[1].GateBaseList.ForEach(x => x.IsChecked = false);
                             }),
                             Margin = new(0, 0, 5, 0),
                         });
