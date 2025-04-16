@@ -14,7 +14,7 @@ namespace CustomMacroPlugin1.MacroSample
         public override void Init()
         {
             MainGate.Text = "Root";
-            MainGate.Add(CreateGateBase("Call FindColor")); //[0]
+            MainGate.Add(CreateTVN("Call FindColor")); //[0]
         }
 
         public override void UpdateState()

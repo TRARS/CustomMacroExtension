@@ -1,5 +1,4 @@
 ﻿using CustomMacroBase;
-using CustomMacroBase.CustomControlEx.NormalButtonEx;
 using CustomMacroBase.Helper.Attributes;
 using CustomMacroBase.Helper.Extensions;
 using System;
@@ -9,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using TrarsUI.Shared.Controls.NormalButtonEx;
 
 namespace CustomMacroPlugin2.MacroSample.Game_FileSort
 {

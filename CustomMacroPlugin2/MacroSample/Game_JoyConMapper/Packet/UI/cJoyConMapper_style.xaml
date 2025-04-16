@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI" 
-                    xmlns:scrollviewerex="clr-namespace:CustomMacroBase.CustomControlEx.ScrollViewerEx;assembly=CustomMacroBase"
+                    xmlns:scrollviewerex="clr-namespace:TrarsUI.Shared.Controls.ScrollViewerEx;assembly=TrarsUI.Shared"
                     x:Class="CustomMacroPlugin2.MacroSample.Game_JoyConMapper.Packet.UI.cJoyConMapper_event">
 
     <local:cJoyConMapper_converter_enum2string x:Key="cJoyConMapper_converter_enum2string"/>

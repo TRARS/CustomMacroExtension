@@ -1,8 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI" 
-                    xmlns:verticalbuttonex="clr-namespace:CustomMacroBase.CustomControlEx.VerticalButtonEx;assembly=CustomMacroBase" 
-                    xmlns:scrollviewerex="clr-namespace:CustomMacroBase.CustomControlEx.ScrollViewerEx;assembly=CustomMacroBase"
+                    xmlns:scrollviewerex="clr-namespace:TrarsUI.Shared.Controls.ScrollViewerEx;assembly=TrarsUI.Shared"
+                    xmlns:verticalbuttonex="clr-namespace:TrarsUI.Shared.Controls.VerticalButtonEx;assembly=TrarsUI.Shared"
                     x:Class="CustomMacroPlugin2.MacroSample.Game_Recorder.Packet.UI.cRecorder_event">
 
     <local:cRecorder_converter_listcheck x:Key="cRecorder_converter_listcheck"/>

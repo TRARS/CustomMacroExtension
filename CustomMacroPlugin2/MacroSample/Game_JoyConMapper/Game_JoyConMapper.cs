@@ -106,17 +106,17 @@ namespace CustomMacroPlugin2.MacroSample.Game_JoyConMapper
 
             MainGate.Text = Title = "JoyCon(L)";
 
-            MainGate.Add(CreateGateBase("enable mapping left-stick to buttons"));//[0]
-            MainGate[0].Add(CreateGateBase("8-direction-movement", hideself: debug_flag["LeftStick 8-direction-movement"]));//[0][0]
+            MainGate.Add(CreateTVN("enable mapping left-stick to buttons"));//[0]
+            MainGate[0].Add(CreateTVN("8-direction-movement", hideself: debug_flag["LeftStick 8-direction-movement"]));//[0][0]
             MainGate[0].AddEx(() => CreateSlider(0, 127, model, nameof(model.LeftStickDeadZone), 1, sliderTextPrefix: $"DeadZone:", defalutValue: 30, hideself: debug_flag["LeftStick 8-direction-movement slider"]));
             MainGate[0].AddEx(() => CreateSlider(128, 1280, model, nameof(model.LeftStickEnlargementFactor), 1, sliderTextPrefix: $"EnlargementFactor:", defalutValue: 1280, hideself: debug_flag["LeftStick 8-direction-movement slider"]));
             MainGate[0].AddEx(() => CreateSlider(64, 180, model, nameof(model.LeftStickClipRadius), 1, sliderTextPrefix: $"ClipRadius:", defalutValue: 128, hideself: debug_flag["LeftStick 8-direction-movement slider"]));
 
-            MainGate.Add(CreateGateBase("enable mapping"));//[1]
+            MainGate.Add(CreateTVN("enable mapping"));//[1]
             MainGate[1].AddEx(() => CreateSlider(16, 1024, model, nameof(model.CycleActivationDuration), 1, sliderTextPrefix: $"CycleActivationDuration:", defalutValue: 384, sliderTextSuffix: "ms", hideself: debug_flag["LeftStick cycle parameta slider"]));
             MainGate[1].AddEx(() => CreateSlider(16, 1024, model, nameof(model.CycleDuration), 1, sliderTextPrefix: $"CycleDuration:", defalutValue: 64, sliderTextSuffix: "x2 ms", hideself: debug_flag["LeftStick cycle parameta slider"]));
 
-            MainGate.Add(CreateGateBase("enable output"));//[2]
+            MainGate.Add(CreateTVN("enable output"));//[2]
 
             MainGate.AddEx(() => new cJoyConMapper() { Margin = new Thickness(0, 4, 0, 4) });
             MainGate.AddEx(() => new TextBlock() { Text = "- Make sure to map Capture->Triangle, Side_L->Square, and Side_R->Circle in DS4W.", Foreground = new SolidColorBrush(Colors.White) });

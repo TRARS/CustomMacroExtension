@@ -152,9 +152,9 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
             MainGate.AddEx(() => CreateSlider(0, 1919, viewmodel, nameof(viewmodel.Center_X), 1, sliderTextPrefix: $"Left", defalutValue: 959, sliderTextSuffix: "Right"));
             MainGate.AddEx(() => CreateSlider(0, 941, viewmodel, nameof(viewmodel.Center_Y), 1, sliderTextPrefix: $"Top", defalutValue: 470, sliderTextSuffix: "Bottom"));
 
-            MainGate.Add(CreateGateBase("BottomLeft -> L3", true));   //[0]
-            MainGate.Add(CreateGateBase("BottomRight -> R3", true));
-            MainGate.Add(CreateGateBase("TopLeft -> L3 + R3", true));
+            MainGate.Add(CreateTVN("BottomLeft -> L3", true));   //[0]
+            MainGate.Add(CreateTVN("BottomRight -> R3", true));
+            MainGate.Add(CreateTVN("TopLeft -> L3 + R3", true));
         }
 
         public override void UpdateState()

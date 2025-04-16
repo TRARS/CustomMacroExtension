@@ -12,9 +12,9 @@ namespace CustomMacroPlugin1.MacroSample
         {
             MainGate.Text = "Main_ToggleButton";
 
-            MainGate.Add(CreateGateBase("Sub_ToggleButton_0"));
-            MainGate.Add(CreateGateBase("Sub_ToggleButton_1"));
-            MainGate.Add(CreateGateBase("Sub_ToggleButton_2"));
+            MainGate.Add(CreateTVN("Sub_ToggleButton_0"));
+            MainGate.Add(CreateTVN("Sub_ToggleButton_1"));
+            MainGate.Add(CreateTVN("Sub_ToggleButton_2"));
         }
 
         public override void UpdateState()

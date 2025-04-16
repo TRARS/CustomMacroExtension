@@ -79,10 +79,10 @@ namespace CustomMacroPlugin1.MacroSample
         {
             MainGate.Text = "Slider and ComboBox";
 
-            MainGate.Add(CreateGateBase("hold press □ to observe the delay during rapid firing")); //[0]
+            MainGate.Add(CreateTVN("hold press □ to observe the delay during rapid firing")); //[0]
             MainGate[0].AddEx(() => CreateSlider(5, 1000, viewmodel, nameof(viewmodel.SliderValue), 1, sliderTextPrefix: $"delay:", defalutValue: 50, sliderTextSuffix: $"ms"));
 
-            MainGate.Add(CreateGateBase("hold press ○ to observe the delay during rapid firing")); //[1]
+            MainGate.Add(CreateTVN("hold press ○ to observe the delay during rapid firing")); //[1]
             MainGate[1].AddEx(() => CreateComboBox(viewmodel, nameof(viewmodel.ComboBoxItemsSource), nameof(viewmodel.ComboBoxSelectedItem), commentText: "ms", defalutIndex: 0));
         }
 

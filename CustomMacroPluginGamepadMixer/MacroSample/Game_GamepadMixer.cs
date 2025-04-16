@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using CustomMacroBase;
-using CustomMacroBase.CustomControlEx.RippleButtonEx;
 using CustomMacroBase.GamePadState;
-using CustomMacroBase.PreBase;
 using System.Windows.Controls;
 using System.Windows.Media;
+using TrarsUI.Shared.Controls.ButtonEx;
+using TrarsUI.Shared.DTOs;
 
 namespace CustomMacroPluginGamepadMixer.MacroSample
 {
@@ -24,13 +24,13 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
             MainGate.AddEx(() => CreateTextBlock("- To enable the mapping feature, set the Ex3 toggle switch to 'ON' position.", Colors.LightGray));
             MainGate.AddEx(() => CreateTextBlock("- Be sure to use HidHide to solve the double input issue.", Colors.LightGray));
 
-            MainGate.Add(CreateGateBase("Options", true));   //[0]
+            MainGate.Add(CreateTVN("Options", true));   //[0]
             {
-                MainGate[0].Add(CreateGateBase("Disable the output of the 2nd controller.", true));   //[0][0]
-                MainGate[0].Add(CreateGateBase("Only the 2nd controller can operate the buttons.", false));   //[0][1]
+                MainGate[0].Add(CreateTVN("Disable the output of the 2nd controller.", true));   //[0][0]
+                MainGate[0].Add(CreateTVN("Only the 2nd controller can operate the buttons.", false));   //[0][1]
             }
 
-            MainGate.Add(CreateGateBase("Managed by the 2nd Controller", true));   //[1]
+            MainGate.Add(CreateTVN("Managed by the 2nd Controller", true));   //[1]
             {
                 MainGate[1].AddEx(() =>
                 {
@@ -64,33 +64,33 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
                     return sp;
                 });
 
-                MainGate[1].Add(CreateGateBase("□", true));   //[1][0]
-                MainGate[1].Add(CreateGateBase("△", true)); //[1][1]
-                MainGate[1].Add(CreateGateBase("○", true));   //[1][2]
-                MainGate[1].Add(CreateGateBase("×", true));    //[1][3]
+                MainGate[1].Add(CreateTVN("□", true));   //[1][0]
+                MainGate[1].Add(CreateTVN("△", true)); //[1][1]
+                MainGate[1].Add(CreateTVN("○", true));   //[1][2]
+                MainGate[1].Add(CreateTVN("×", true));    //[1][3]
 
-                MainGate[1].Add(CreateGateBase("DpadLeft", true));  //[1][4]
-                MainGate[1].Add(CreateGateBase("DpadUp", true));    //[1][5]
-                MainGate[1].Add(CreateGateBase("DpadRight", true)); //[1][6]
-                MainGate[1].Add(CreateGateBase("DpadDown", true));  //[1][7]
+                MainGate[1].Add(CreateTVN("DpadLeft", true));  //[1][4]
+                MainGate[1].Add(CreateTVN("DpadUp", true));    //[1][5]
+                MainGate[1].Add(CreateTVN("DpadRight", true)); //[1][6]
+                MainGate[1].Add(CreateTVN("DpadDown", true));  //[1][7]
 
-                MainGate[1].Add(CreateGateBase("Share", true));       //[1][8]
-                MainGate[1].Add(CreateGateBase("Options", true));     //[1][9]
-                MainGate[1].Add(CreateGateBase("TouchButton", true)); //[1][10]
+                MainGate[1].Add(CreateTVN("Share", true));       //[1][8]
+                MainGate[1].Add(CreateTVN("Options", true));     //[1][9]
+                MainGate[1].Add(CreateTVN("TouchButton", true)); //[1][10]
 
-                MainGate[1].Add(CreateGateBase("PS", true));   //[1][11]
-                MainGate[1].Add(CreateGateBase("Mute", true)); //[1][12]
+                MainGate[1].Add(CreateTVN("PS", true));   //[1][11]
+                MainGate[1].Add(CreateTVN("Mute", true)); //[1][12]
 
-                MainGate[1].Add(CreateGateBase("L1", true)); //[1][13]
-                MainGate[1].Add(CreateGateBase("L2", true)); //[1][14]
-                MainGate[1].Add(CreateGateBase("L3", true)); //[1][15]
+                MainGate[1].Add(CreateTVN("L1", true)); //[1][13]
+                MainGate[1].Add(CreateTVN("L2", true)); //[1][14]
+                MainGate[1].Add(CreateTVN("L3", true)); //[1][15]
 
-                MainGate[1].Add(CreateGateBase("R1", true)); //[1][16]
-                MainGate[1].Add(CreateGateBase("R2", true)); //[1][17]
-                MainGate[1].Add(CreateGateBase("R3", true)); //[1][18]
+                MainGate[1].Add(CreateTVN("R1", true)); //[1][16]
+                MainGate[1].Add(CreateTVN("R2", true)); //[1][17]
+                MainGate[1].Add(CreateTVN("R3", true)); //[1][18]
 
-                MainGate[1].Add(CreateGateBase("Left Stick", true)); //[1][19]
-                MainGate[1].Add(CreateGateBase("Right Stick", true)); //[1][20]
+                MainGate[1].Add(CreateTVN("Left Stick", true)); //[1][19]
+                MainGate[1].Add(CreateTVN("Right Stick", true)); //[1][20]
             }
         }
 
@@ -108,7 +108,7 @@ namespace CustomMacroPluginGamepadMixer.MacroSample
         bool controller2_output_disabled => MainGate[0][0].Enable;
         bool controller2_buttons_only => MainGate[0][1].Enable;
 
-        private void Gamepad0(int ind, GateBase host)
+        private void Gamepad0(int ind, ToggleTreeViewNode host)
         {
             if (ind != 0) { return; }
 
