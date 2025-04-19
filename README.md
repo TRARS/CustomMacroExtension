@@ -30,9 +30,9 @@ namespace CustomMacroPlugin1.MacroSample
         {
             MainGate.Text = "Main_ToggleButton";
 
-            MainGate.Add(CreateGateBase("Sub_ToggleButton_0"));
-            MainGate.Add(CreateGateBase("Sub_ToggleButton_1"));
-            MainGate.Add(CreateGateBase("Sub_ToggleButton_2"));
+            MainGate.Add(CreateTVN("Sub_ToggleButton_0"));
+            MainGate.Add(CreateTVN("Sub_ToggleButton_1"));
+            MainGate.Add(CreateTVN("Sub_ToggleButton_2"));
         }
 
         public override void UpdateState()
@@ -72,9 +72,9 @@ namespace CustomMacroPlugin1.MacroSample
         {
             MainGate.Text = "Slain Albinauric mobs. All macros are activated by pressing □ and termination upon pressing ○";
 
-            MainGate.Add(CreateGateBase("Sacred Relic Sword V0", groupName: "jmB!$h@T"));
-            MainGate.Add(CreateGateBase("Sacred Relic Sword V1", groupName: "jmB!$h@T"));
-            MainGate.Add(CreateGateBase("Sacred Relic Sword V2", groupName: "jmB!$h@T"));
+            MainGate.Add(CreateTVN("Sacred Relic Sword V0", groupName: "jmB!$h@T"));
+            MainGate.Add(CreateTVN("Sacred Relic Sword V1", groupName: "jmB!$h@T"));
+            MainGate.Add(CreateTVN("Sacred Relic Sword V2", groupName: "jmB!$h@T"));
         }
 
         public override void UpdateState()
@@ -308,10 +308,10 @@ namespace CustomMacroPlugin1.MacroSample
         {
             MainGate.Text = "Slider and ComboBox";
 
-            MainGate.Add(CreateGateBase("hold press □ to observe the delay during rapid firing")); //[0]
+            MainGate.Add(CreateTVN("hold press □ to observe the delay during rapid firing")); //[0]
             MainGate[0].AddEx(() => CreateSlider(5, 1000, viewmodel, nameof(viewmodel.SliderValue), 1, sliderTextPrefix: $"delay:", defalutValue: 50, sliderTextSuffix: $"ms"));
 
-            MainGate.Add(CreateGateBase("hold press ○ to observe the delay during rapid firing")); //[1]
+            MainGate.Add(CreateTVN("hold press ○ to observe the delay during rapid firing")); //[1]
             MainGate[1].AddEx(() => CreateComboBox(viewmodel, nameof(viewmodel.ComboBoxItemsSource), nameof(viewmodel.ComboBoxSelectedItem), commentText: "ms", defalutIndex: 0));
         }
 

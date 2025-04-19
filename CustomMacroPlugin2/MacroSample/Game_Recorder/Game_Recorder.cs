@@ -98,7 +98,7 @@ namespace CustomMacroPlugin2.MacroSample.Game_Recorder
         bool runByBtn = false;
         bool tryLoop => MainGate[1][0].Enable;
 
-        bool playback_is_running => RM.MacroTaskIsRunning;0
+        bool playback_is_running => RM.MacroTaskIsRunning;
 
         bool start_flag => RealDS4.Touch0IsActive || tryStart;
         bool stop_flag => runByBtn ? tryStop : !RealDS4.Touch0IsActive;
